@@ -24,6 +24,7 @@ function Header() {
         sx={{
           width: 350,
           marginX: "auto",
+          height: 0,
           "& .MuiOutlinedInput-root": {
             paddingLeft: "8px",
             paddingBottom: 0.3,
@@ -64,7 +65,6 @@ function Header() {
                 borderBottomLeftRadius: "10px",
                 borderBottomRightRadius: "10px",
               },
-
               backgroundColor: "#00000000 !important",
               boxShadow: "none",
               "& .MuiAutocomplete-listbox": {
