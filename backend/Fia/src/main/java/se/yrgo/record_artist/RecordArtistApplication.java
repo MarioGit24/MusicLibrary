@@ -1,13 +1,13 @@
-package se.yrgo.recordLabel_microservice;
+package se.yrgo.record_artist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RecordLabelMicroserviceApplication {
+public class RecordArtistApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RecordLabelMicroserviceApplication.class, args);
+		SpringApplication.run(RecordArtistApplication.class, args);
 	}
 
 }

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.yrgo</groupId>
-	<artifactId>recordLabel_microservice</artifactId>
+	<artifactId>record_artist</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>recordLabel_microservice</name>
-	<description>Demo project for Spring Boot</description>
+	<name>record_artist</name>
+	<description>record and artist microservice</description>
 	<url/>
 	<licenses>
 		<license/>
