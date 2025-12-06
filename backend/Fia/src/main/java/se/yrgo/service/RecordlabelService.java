@@ -8,4 +8,6 @@ public interface RecordlabelService {
     List<Recordlabel> getAllRecordlabels();
 
     void createRecordlabel(Recordlabel recordlabel);
+
+    boolean enrollArtist(Long artistId, Long recordlabelId);
 }

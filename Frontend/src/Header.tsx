@@ -10,7 +10,7 @@ function Header() {
         paddingTop: 15,
         paddingLeft: 25,
         paddingRight: 20,
-        height: "100vh",
+        marginBottom: 25,
         backgroundColor: "#121212",
         cursor: "default",
         display: "flex",

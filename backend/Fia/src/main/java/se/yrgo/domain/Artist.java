@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
 
+@Entity
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +15,7 @@ public class Artist {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id")
     @JsonIgnore
-    private Recordlabel Recordlabel;
+    private Recordlabel recordlabel;
 
     public Artist() {
     }
@@ -41,11 +42,11 @@ public class Artist {
     }
 
     public Recordlabel getRecordlabel() {
-        return Recordlabel;
+        return recordlabel;
     }
 
     public void setRecordlabel(Recordlabel recordlabel) {
-        Recordlabel = recordlabel;
+        this.recordlabel = recordlabel;
     }
 
     @Override
@@ -54,7 +55,7 @@ public class Artist {
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((Recordlabel == null) ? 0 : Recordlabel.hashCode());
+        result = prime * result + ((recordlabel == null) ? 0 : recordlabel.hashCode());
         return result;
     }
 
@@ -77,10 +78,10 @@ public class Artist {
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (Recordlabel == null) {
-            if (other.Recordlabel != null)
+        if (recordlabel == null) {
+            if (other.recordlabel != null)
                 return false;
-        } else if (!Recordlabel.equals(other.Recordlabel))
+        } else if (!recordlabel.equals(other.recordlabel))
             return false;
         return true;
     }

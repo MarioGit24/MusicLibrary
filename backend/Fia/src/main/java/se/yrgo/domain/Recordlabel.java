@@ -12,7 +12,7 @@ public class Recordlabel {
 
     private String name;
 
-    @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recordlabel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Artist> artists = new ArrayList<>();
 
     public Recordlabel() {
