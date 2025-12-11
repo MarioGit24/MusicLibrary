@@ -5,3 +5,8 @@
   color: #b3b3b3;
   font-family: "poppins", "arial";
 }
+
+.MuiList-root {
+  color: white;
+  background-color: #1f1f1f;
+}

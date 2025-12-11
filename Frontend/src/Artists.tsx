@@ -16,10 +16,6 @@ function Artists() {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(artists);
-  }, [artists]);
-
   return (
     <div>
       {artists.map((artist, i) => (
