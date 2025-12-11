@@ -8,15 +8,15 @@ function Header() {
     <header
       style={{
         paddingTop: 15,
-        paddingLeft: 25,
-        paddingRight: 20,
         marginBottom: 25,
         backgroundColor: "#121212",
         cursor: "default",
         display: "flex",
       }}
     >
-      <h2 style={{ fontWeight: 500, letterSpacing: -1 }}>Spotify</h2>
+      <h2 style={{ fontWeight: 500, letterSpacing: -1, color: "#8F6D92" }}>
+        Spotify
+      </h2>
 
       <Autocomplete
         disablePortal
