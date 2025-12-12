@@ -1,4 +1,4 @@
-package se.domain;
+package se.yrgo.single_ep.domain;
 
 import java.util.*;
 
@@ -14,7 +14,8 @@ public class Song {
     @ManyToOne(fetch = FetchType.LAZY)
     private List<Song> songs = new ArrayList<>();
 
-    public Song(){}
+    public Song() {
+    }
 
     public long getSong_id() {
         return song_id;

@@ -25,6 +25,11 @@ public class ArtistController {
         return artistService.getAllArtists();
     }
 
+    @GetMapping("/{id}")
+    public Artist getArtistById(@PathVariable Long id) {
+        return artistService.getArtist(id);
+    }
+
     @PostMapping
     public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
         Artist createdArtist = artistService.createArtist(artist);

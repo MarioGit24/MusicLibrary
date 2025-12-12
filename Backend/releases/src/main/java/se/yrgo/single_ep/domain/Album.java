@@ -1,4 +1,4 @@
-package se.domain;
+package se.yrgo.single_ep.domain;
 
 import java.util.*;
 
@@ -14,7 +14,8 @@ public class Album {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL);
     private List<Album> albums = new ArrayList<>();
 
-    public Album(){}
+    public Album() {
+    }
 
     public long getAlbum_Id() {
         return album_Id;
