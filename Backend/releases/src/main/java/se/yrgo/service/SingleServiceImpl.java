@@ -1,12 +1,12 @@
-package se.yrgo.single_ep.service;
+package se.yrgo.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import se.yrgo.single_ep.data.SingleRepository;
-import se.yrgo.single_ep.domain.Single;
+import se.yrgo.data.SingleRepository;
+import se.yrgo.domain.Single;
 
 
 @Service

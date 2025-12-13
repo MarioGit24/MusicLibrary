@@ -1,4 +1,4 @@
-package se.domain;
+package se.yrgo.domain;
 
 import java.util.*;
 

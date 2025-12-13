@@ -1,14 +1,16 @@
-package se.yrgo.single_ep.data;
+package se.yrgo.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import se.yrgo.single_ep.domain.Ep;
+import se.yrgo.domain.Single;
 
 
 @Repository
-public interface EpRepository extends JpaRepository<Ep, Long>  {
+public interface SingleRepository extends JpaRepository<Single, Long>  {
+
 
     
 } 
-   
+    
+

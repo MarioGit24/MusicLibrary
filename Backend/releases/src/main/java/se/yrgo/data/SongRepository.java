@@ -1,7 +1,7 @@
-package se.data;
+package se.yrgo.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import se.domain.Song;
+import se.yrgo.domain.Song;
 
 public interface SongRepository extends JpaRepository<Song, Long> {}
