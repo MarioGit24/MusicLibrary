@@ -8,7 +8,7 @@ function Header() {
     <header
       style={{
         paddingTop: 15,
-        marginBottom: 25,
+        marginBottom: 30,
         backgroundColor: "#121212",
         cursor: "default",
         display: "flex",
