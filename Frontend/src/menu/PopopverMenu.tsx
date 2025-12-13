@@ -3,17 +3,22 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
+import ModalMenu from "./Modal";
 
 function PopoverMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [addType, setAddType] = useState("");
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleOpenModal = (type: string) => {
     setAnchorEl(null);
+    setModalOpen(true);
+    setAddType(type);
   };
 
   return (
@@ -31,7 +36,7 @@ function PopoverMenu() {
         aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleOpenModal}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -90,12 +95,17 @@ function PopoverMenu() {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>Add artist</MenuItem>
-        <MenuItem onClick={handleClose}>Add album</MenuItem>
-        <MenuItem onClick={handleClose}>Add EP</MenuItem>
-        <MenuItem onClick={handleClose}>Add single</MenuItem>
-        <MenuItem onClick={handleClose}>Add song</MenuItem>
+        <MenuItem onClick={() => handleOpenModal("artist")}>
+          Add artist
+        </MenuItem>
+        <MenuItem onClick={() => handleOpenModal("album")}>Add album</MenuItem>
+        <MenuItem onClick={() => handleOpenModal("EP")}>Add EP</MenuItem>
+        <MenuItem onClick={() => handleOpenModal("single")}>
+          Add single
+        </MenuItem>
+        <MenuItem onClick={() => handleOpenModal("song")}>Add song</MenuItem>
       </Menu>
+      <ModalMenu open={modalOpen} setOpen={setModalOpen} type={addType} />
     </div>
   );
 }
