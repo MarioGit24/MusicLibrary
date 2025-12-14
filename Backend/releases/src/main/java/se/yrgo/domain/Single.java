@@ -1,4 +1,4 @@
-package se.yrgo.single_ep.domain;
+package se.yrgo.domain;
 
 
 import jakarta.persistence.*;

@@ -1,20 +1,38 @@
 import AddIcon from "@mui/icons-material/Add";
+import AlbumIcon from "@mui/icons-material/Album";
+import AlbumOutlinedIcon from "@mui/icons-material/AlbumOutlined";
+import LibraryMusicOutlinedIcon from "@mui/icons-material/LibraryMusicOutlined";
+import MusicNoteOutlinedIcon from "@mui/icons-material/MusicNoteOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
+import ModalMenu from "./Modal";
 
 function PopoverMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [addType, setAddType] = useState("");
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleOpenModal = (type: string) => {
     setAnchorEl(null);
+    setModalOpen(true);
+    setAddType(type);
   };
+
+  const menuData = [
+    { name: "artist", icon: "" },
+    { name: "album", icon: "" },
+    { name: "EP", icon: "" },
+    { name: "song", icon: "" },
+    { name: "single", icon: "" },
+  ];
 
   return (
     <div>
@@ -31,7 +49,7 @@ function PopoverMenu() {
         aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleOpenModal}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -90,12 +108,68 @@ function PopoverMenu() {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>Add artist</MenuItem>
-        <MenuItem onClick={handleClose}>Add album</MenuItem>
-        <MenuItem onClick={handleClose}>Add EP</MenuItem>
-        <MenuItem onClick={handleClose}>Add single</MenuItem>
-        <MenuItem onClick={handleClose}>Add song</MenuItem>
+        {menuData.map((item) => (
+          <MenuItem onClick={() => handleOpenModal(item.name)}>
+            <div
+              style={{
+                padding: 6,
+                marginRight: 10,
+                borderRadius: "50%",
+                backgroundColor: "#ffffff10",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {item.name === "album" ? (
+                <AlbumIcon
+                  sx={{
+                    opacity: 0.8,
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              ) : item.name === "EP" ? (
+                <AlbumOutlinedIcon
+                  sx={{
+                    opacity: 0.8,
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              ) : item.name === "artist" ? (
+                <PersonOutlineOutlinedIcon
+                  sx={{
+                    opacity: 0.8,
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              ) : item.name === "song" ? (
+                <LibraryMusicOutlinedIcon
+                  sx={{
+                    opacity: 0.8,
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              ) : item.name === "single" ? (
+                <MusicNoteOutlinedIcon
+                  sx={{
+                    opacity: 0.8,
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+            <p style={{ fontSize: 14 }}>Add {item.name}</p>
+          </MenuItem>
+        ))}
       </Menu>
+      <ModalMenu open={modalOpen} setOpen={setModalOpen} type={addType} />
     </div>
   );
 }

@@ -1,8 +1,8 @@
-package se.yrgo.single_ep.service;
+package se.yrgo.service;
 
 import java.util.List;
 
-import se.yrgo.single_ep.domain.Ep;
+import se.yrgo.domain.Ep;
 
 
 

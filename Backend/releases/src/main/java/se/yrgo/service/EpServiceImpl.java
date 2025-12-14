@@ -1,11 +1,11 @@
-package se.yrgo.single_ep.service;
+package se.yrgo.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import se.yrgo.single_ep.data.EpRepository;
-import se.yrgo.single_ep.domain.Ep;
+import se.yrgo.data.EpRepository;
+import se.yrgo.domain.Ep;
 
 @Service
 public class EpServiceImpl implements EpService {
