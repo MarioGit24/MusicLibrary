@@ -1,4 +1,3 @@
-import Artists from "./Artists";
 import Header from "./Header";
 import PopoverMenu from "./menu/PopopverMenu";
 
@@ -14,7 +13,7 @@ function App() {
     >
       <Header />
       <PopoverMenu />
-      <Artists />
+      {/* TODO: take back <Artists /> */}
     </div>
   );
 }
