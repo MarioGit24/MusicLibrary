@@ -1,98 +1,69 @@
 package se.yrgo.domain;
 
-import java.util.*;
-
 import jakarta.persistence.*;
 
 @Entity
 public class Recordlabel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long record_id;
+    private Long id;
 
-    private String name;
+    private Long artistId;
 
-    @OneToMany(mappedBy = "recordlabel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Artist> artists = new ArrayList<>();
+    private Long albumId;
 
-    public Recordlabel() {
+    private Long epId;
+
+    private Long singleId;
+
+    private Long songId;
+
+    public Long getId() {
+        return id;
     }
 
-    public Recordlabel(Long record_id, String name) {
-        this.record_id = record_id;
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Long getRecord_id() {
-        return record_id;
+    public Long getArtistId() {
+        return artistId;
     }
 
-    public void setRecord_id(Long record_id) {
-        this.record_id = record_id;
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
     }
 
-    public String getName() {
-        return name;
+    public Long getAlbumId() {
+        return albumId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAlbumId(Long albumId) {
+        this.albumId = albumId;
     }
 
-    public List<Artist> getArtists() {
-        return artists;
+    public Long getEpId() {
+        return epId;
     }
 
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
+    public void setEpId(Long epId) {
+        this.epId = epId;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((record_id == null) ? 0 : record_id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((artists == null) ? 0 : artists.hashCode());
-        return result;
+    public Long getSingleId() {
+        return singleId;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Recordlabel other = (Recordlabel) obj;
-        if (record_id == null) {
-            if (other.record_id != null)
-                return false;
-        } else if (!record_id.equals(other.record_id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (artists == null) {
-            if (other.artists != null)
-                return false;
-        } else if (!artists.equals(other.artists))
-            return false;
-        return true;
+    public void setSingleId(Long singleId) {
+        this.singleId = singleId;
     }
 
-    // @OneToMany(mappedBy = "ep", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<Ep> vehicles = new ArrayList<>();
+    public Long getSongId() {
+        return songId;
+    }
 
-    // @OneToMany(mappedBy = "single", cascade = CascadeType.ALL, orphanRemoval =
-    // true)
-    // private List<Signle> vehicles = new ArrayList<>();
-
-    // @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval =
-    // true)
-    // private List<Album> vehicles = new ArrayList<>();
+    public void setSongId(Long songId) {
+        this.songId = songId;
+    }
 
 }

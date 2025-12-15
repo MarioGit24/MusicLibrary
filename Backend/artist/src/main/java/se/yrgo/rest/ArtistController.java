@@ -35,4 +35,11 @@ public class ArtistController {
         Artist createdArtist = artistService.createArtist(artist);
         return new ResponseEntity<>(createdArtist, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}/assign-label")
+    public ResponseEntity<Artist> assignToLabel(@PathVariable Long id, @RequestParam Long labelId) {
+        Artist updatedArtist = artistService.updateArtistLabel(id, labelId);
+        return ResponseEntity.ok(updatedArtist);
+    }
+
 }

@@ -7,43 +7,42 @@ import org.springframework.stereotype.*;
 
 import se.yrgo.data.*;
 import se.yrgo.domain.*;
+import se.yrgo.single_ep.domain.*;
 
 @Service
 public class RecordlabelServiceImpl implements RecordlabelService {
-    @Autowired
-    private RecordlabelRepository recordlabelRepository;
 
-    @Autowired
-    private ArtistRepository artistRepository;
+    private final RecordlabelRepository recordlabelRepository;
+    private final RestClient restClient;
 
-    @Override
-    public List<Recordlabel> getAllRecordlabels() {
-        return recordlabelRepository.findAll();
+    @Value("${artist.service.url}")
+    private String artistServiceUrl;
+
+    @Value("${releases.service.url}")
+    private String releasesServiceUrl;
+
+    public RecordlabelServiceImpl(RecordlabelRepository recordlabelRepository, RestClient restClient) {
+        this.recordlabelRepository = recordlabelRepository;
+        this.restClient = restClient;
     }
 
     @Override
-    public void createRecordlabel(Recordlabel recordlabel) {
-        recordlabelRepository.save(recordlabel);
+    public RecordlabelResponseDTO getRecordlabelDetails(Long labelId) {
+        Recordlabel label = recordlabelRepository.findById(labelId)
+                .orElseThrow(() -> new ResourceNotFoundException("Label not found"));
+
+        List<ArtistDTO> artists = restClient.get()
+                .uri(artistServiceUrl + "?labelId=" + labelId)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ArtistDTO>>() {
+                });
+
+        List<ReleaseDTO> releases = restClient.get()
+                .uri(releasesServiceUrl + "?labelId=" + labelId)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ReleaseDTO>>() {
+                });
+
+        return new RecordlabelResponseDTO(label, artists, releases);
     }
-
-    @Override
-    public boolean enrollArtist(Long artistId, Long recordlabelId) {
-        Optional<Recordlabel> recordLabelOpt = recordlabelRepository.findById(recordlabelId);
-        Optional<Artist> artistOpt = artistRepository.findById(artistId);
-
-        if (recordLabelOpt.isEmpty() || artistOpt.isEmpty()) {
-            return false;
-        }
-
-        Recordlabel recordlabel = recordLabelOpt.get();
-        Artist artist = artistOpt.get();
-
-        recordlabel.getArtists().add(artist);
-        artist.setRecordlabel(recordlabel);
-
-        recordlabelRepository.save(recordlabel);
-
-        return true;
-    }
-
 }

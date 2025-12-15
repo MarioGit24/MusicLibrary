@@ -9,9 +9,9 @@
 		<version>3.3.5</version>
 	</parent>
 	<groupId>se.yrgo</groupId>
-	<artifactId>recordlabel_artist</artifactId>
+	<artifactId>recordlabel</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>recordlabel_artist</name>
+	<name>recordlabel</name>
 	<description>record and artist microservice</description>
 	<url />
 	<licenses>

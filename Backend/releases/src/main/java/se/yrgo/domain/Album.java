@@ -9,7 +9,7 @@ public class Album {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long album_Id;
 
-    private String album;
+    private String title;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL);
     private List<Album> albums = new ArrayList<>();
@@ -25,12 +25,12 @@ public class Album {
         this.album_Id = album_Id;
     }
 
-    public String getAlbum() {
-        return album;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAlbum(String album) {
-        this.album = album;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public List<Album> getAlbums() {
@@ -46,7 +46,7 @@ public class Album {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (album_Id ^ (album_Id >>> 32));
-        result = prime * result + ((album == null) ? 0 : album.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((albums == null) ? 0 : albums.hashCode());
         return result;
     }
@@ -62,10 +62,10 @@ public class Album {
         Album other = (Album) obj;
         if (album_Id != other.album_Id)
             return false;
-        if (album == null) {
-            if (other.album != null)
+        if (title == null) {
+            if (other.title != null)
                 return false;
-        } else if (!album.equals(other.album))
+        } else if (!title.equals(other.title))
             return false;
         if (albums == null) {
             if (other.albums != null)

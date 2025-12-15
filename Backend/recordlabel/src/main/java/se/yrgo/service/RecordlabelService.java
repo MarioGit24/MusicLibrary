@@ -2,10 +2,10 @@ package se.yrgo.service;
 
 import java.util.*;
 
-import se.yrgo.domain.*;
+import se.yrgo.single_ep.domain.*;
 
 public interface RecordlabelService {
-    List<Recordlabel> getAllRecordlabels();
+    List<RecordlabelResponseDTO> getAllRecordlabels();
 
     void createRecordlabel(Recordlabel recordlabel);
 

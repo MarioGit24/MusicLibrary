@@ -29,4 +29,11 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.findById(id).orElseThrow(() -> new RuntimeException("Artist not found"));
     }
 
+    public Artist updateArtistLabel(Long artistId, Long labelId) {
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        artist.setLabelId(labelId);
+        return artistRepository.save(artist);
+    }
 }

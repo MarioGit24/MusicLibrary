@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import se.yrgo.domain.*;
 import se.yrgo.service.*;
+import se.yrgo.single_ep.domain.*;
 
 @RestController
 @RequestMapping("/recordlabels")
@@ -21,8 +22,8 @@ public class RecordlabelController {
         this.recordlabelService = recordlabelService;
     }
 
-    @GetMapping
-    public List<Recordlabel> getAllRecordlabels() {
+    @GetMapping("/detailed")
+    public List<RecordlabelResponseDTO> getAllRecordlabels() {
         return recordlabelService.getAllRecordlabels();
     }
 
@@ -31,23 +32,4 @@ public class RecordlabelController {
         recordlabelService.createRecordlabel(recordlabel);
         return ResponseEntity.ok("Record label created succesfully!");
     }
-
-    // assign artist to record label
-    @PostMapping("/enrollArtist")
-    public ResponseEntity<String> enrollArtistInRecordlabel(
-            @RequestParam Long artistId,
-            @RequestParam Long recordlabelId) {
-
-        boolean success = recordlabelService.enrollArtist(artistId, recordlabelId);
-
-        if (!success) {
-            return ResponseEntity.badRequest()
-                    .body("Invalid recordlabel or artist ID provided.");
-        }
-
-        return ResponseEntity.ok(
-                "Enrollment successful: Artist ID " + artistId +
-                        " linked to Recordlabel ID " + recordlabelId);
-    }
-
 }
