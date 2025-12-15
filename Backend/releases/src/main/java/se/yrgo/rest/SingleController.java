@@ -39,8 +39,9 @@ public class SingleController {
     public ResponseEntity<Single> createSingle(@RequestBody Single single){
         Single newSingle = singleService.createSingle(single); 
         return new ResponseEntity<>(newSingle, HttpStatus.CREATED); 
-
     }
+
+    
 
 
 

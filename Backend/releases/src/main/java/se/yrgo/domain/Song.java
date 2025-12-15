@@ -1,77 +1,64 @@
 package se.yrgo.domain;
 
-import java.util.*;
-
 import jakarta.persistence.*;
 
+@Entity
 public class Song {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long song_id;
+    private Long id;
 
-    private String song;
+    private String title;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private List<Song> songs = new ArrayList<>();
+    @JoinColumn(name = "album_id")
+    private Album album;
 
     public Song() {
     }
 
-    public long getSong_id() {
-        return song_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setSong_id(long song_id) {
-        this.song_id = song_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getSong() {
-        return song;
+    public String getTitle() {
+        return title;
     }
 
-    public void setSong(String song) {
-        this.song = song;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public List<Song> getSongs() {
-        return songs;
+    public Album getAlbum() {
+        return album;
     }
 
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Song))
+            return false;
+        Song song = (Song) o;
+        return id != null && id.equals(song.id);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (song_id ^ (song_id >>> 32));
-        result = prime * result + ((song == null) ? 0 : song.hashCode());
-        result = prime * result + ((songs == null) ? 0 : songs.hashCode());
-        return result;
+        return getClass().hashCode();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Song other = (Song) obj;
-        if (song_id != other.song_id)
-            return false;
-        if (song == null) {
-            if (other.song != null)
-                return false;
-        } else if (!song.equals(other.song))
-            return false;
-        if (songs == null) {
-            if (other.songs != null)
-                return false;
-        } else if (!songs.equals(other.songs))
-            return false;
-        return true;
+    public String toString() {
+        return "Song{id=" + id + ", title='" + title + "'}";
     }
 }

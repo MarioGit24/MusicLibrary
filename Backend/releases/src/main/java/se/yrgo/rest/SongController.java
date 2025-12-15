@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import se.yrgo.domain.Song;
 import se.yrgo.service.SongService;
 
-@RequestController
-@RequestMapping("songs")
-@CrossOrigin(origins = "localhost:3000")
+@RestController
+@RequestMapping("/songs")
+@CrossOrigin(origins = "http://localhost:3000")
 public class SongController {
-    private SongService songService;
 
+    private final SongService songService;
 
     @Autowired
     public SongController(SongService songService){
@@ -22,15 +22,15 @@ public class SongController {
     }
 
     @GetMapping
-    public List<Song>getAllSongs(){
+    public List<Song> getAllSongs(){
         return songService.getAllSongs();
     }
 
     @PostMapping
-    public ResponseEntity<Song> createSongs(@RequestBody Song song){
+    public ResponseEntity<Song> createSong(@RequestBody Song song){
         Song newSong = songService.createSong(song);
-
-        return new ResponseEntity<Song>(HttpStatus.CREATED);
-
+        return new ResponseEntity<>(newSong, HttpStatus.CREATED);
     }
+
+    
 }

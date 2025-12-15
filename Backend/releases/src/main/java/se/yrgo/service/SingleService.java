@@ -5,8 +5,13 @@ import java.util.List;
 import se.yrgo.domain.Single;
 
 public interface SingleService {
-    public List<Single> getSingles(); 
+    List<Single> getSingles(); 
 
-    public Single createSingle(Single single); 
+    Single createSingle(Single single);
+    
+    Single updateSingle(Long id, Single single);
 
+    Single getSingleById(Long id);
+
+    void deleteSingle(Long id);
 }
