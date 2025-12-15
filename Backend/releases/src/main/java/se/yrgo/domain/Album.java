@@ -11,7 +11,7 @@ public class Album {
 
     private String album;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL);
+    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Album> albums = new ArrayList<>();
 
     public Album(){}
