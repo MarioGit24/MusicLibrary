@@ -10,10 +10,9 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
-    private Long artistId; 
+    private Long artistId;
+    private Long recordLabelId;
 
     public Long getArtistId() {
         return artistId;
@@ -27,6 +26,14 @@ public class Album {
     private List<Song> songs = new ArrayList<>();
 
     public Album() {
+    }
+
+    public void addSong(Song song) {
+        if (songs == null) {
+            songs = new ArrayList<>();
+        }
+        songs.add(song);
+        song.setAlbum(this);
     }
 
     public Long getId() {

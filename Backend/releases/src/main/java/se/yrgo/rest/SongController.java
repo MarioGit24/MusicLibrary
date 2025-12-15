@@ -3,7 +3,8 @@ package se.yrgo.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import se.yrgo.domain.Song;
@@ -26,14 +27,13 @@ public class SongController {
         return songService.getAllSongs();
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public Song getSongById(@PathVariable Long id){
         return songService.getSongById(id);
-
     }
 
-    @PutMapping
-    public Song updateSong(@PathVariable Long id, Song song){
+    @PutMapping("/{id}") 
+    public Song updateSong(@PathVariable Long id, @RequestBody Song song){
         return songService.updateSong(id, song);
     }
 
@@ -43,7 +43,7 @@ public class SongController {
         return new ResponseEntity<>(newSong, HttpStatus.CREATED);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")  
     public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
         songService.deleteSong(id);
         return ResponseEntity.noContent().build();
