@@ -11,12 +11,22 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
+    private Long artistId;
+    private Long recordLabelId;
+
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
 
+    public void addSong(Song song) {
+        if (songs == null) {
+            songs = new ArrayList<>();
+        }
+        songs.add(song);
+        song.setAlbum(this); 
+    }
+    
     public Album() {}
 
     public Long getId() {
