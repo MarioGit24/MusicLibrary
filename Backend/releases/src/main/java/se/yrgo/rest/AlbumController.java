@@ -30,4 +30,24 @@ public class AlbumController {
         Album createdAlbum = albumService.createAlbum(album);
         return new ResponseEntity<>(createdAlbum,HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public Album getAlbum(@PathVariable Long id){
+        return albumService.getAlbumById(id);
+    }
+    
+    @PutMapping("/{id}")
+    public Album updateAlbum(@PathVariable Long id, @RequestBody Album album) {
+        return albumService.updateAlbum(id, album);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAlbum(@PathVariable Long id) {
+        albumService.deleteAlbum(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
 }

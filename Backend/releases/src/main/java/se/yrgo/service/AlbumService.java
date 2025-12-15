@@ -6,8 +6,14 @@ import se.yrgo.domain.Album;
 
 public interface AlbumService {
 
-    public List<Album> getAllAlbums();
+    List<Album> getAllAlbums();
     
-    public Album createAlbum(Album album);
+    Album createAlbum(Album album);
+
+    Album getAlbumById(Long id);
+
+    Album updateAlbum(Long id, Album album);
+
+    void deleteAlbum(Long id);
 
 }

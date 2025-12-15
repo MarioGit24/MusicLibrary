@@ -1,64 +1,59 @@
 package se.yrgo.domain;
 
-
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Single {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private Long id; 
-    private String title;
-    //ska ha en låt
-    private Long artistId; 
 
-    public Long getArtistId() {
-        return artistId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+
+    public Single() {}
+
+    public Long getId() {
+        return id;
     }
-    public void setArtistId(Long artistId) {
-        this.artistId = artistId;
+
+    public void setId(Long id) {
+        this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Single)) return false;
+        Single single = (Single) o;
+        return id != null && id.equals(single.id);
+    }
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
-        return result;
+        return Objects.hash(id);
     }
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Single other = (Single) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
-        return true;
-    }
+
     @Override
     public String toString() {
-        return "Single [id=" + id + ", title=" + title + "]";
+        return "Single{id=" + id + ", title='" + title + '\'' +
+                ", album=" + (album != null ? album.getId() : null) + '}';
     }
-    public Single() {
-    } 
-    
-
 }

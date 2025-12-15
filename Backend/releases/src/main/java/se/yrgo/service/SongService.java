@@ -5,12 +5,14 @@ import java.util.List;
 import se.yrgo.domain.Song;
 
 public interface SongService {
-    public List<Song> getAllSongs();
+    List<Song> getAllSongs();
 
-    public Song createSong(Song song);
-    
+    Song createSong(Song song);
 
-    
+    Song getSongById(Long id);
 
+    Song updateSong(Long id, Song song);
+
+    void deleteSong(Long id);
     
 }
