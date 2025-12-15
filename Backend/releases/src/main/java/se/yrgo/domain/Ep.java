@@ -14,6 +14,14 @@ public class Ep {
     @OneToMany(mappedBy = "ep", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
 
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
     public Long getId() {
         return id;
     }
