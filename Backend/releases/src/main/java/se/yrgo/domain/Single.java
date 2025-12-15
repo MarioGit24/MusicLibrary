@@ -30,14 +30,6 @@ public class Single {
         this.title = title;
     }
 
-    public Album getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(Album album) {
-        this.album = album;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,7 +45,6 @@ public class Single {
 
     @Override
     public String toString() {
-        return "Single{id=" + id + ", title='" + title + '\'' +
-                ", album=" + (album != null ? album.getId() : null) + '}';
+        return "Single{id=" + id + ", title='" + title + "'}";
     }
 }

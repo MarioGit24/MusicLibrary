@@ -34,7 +34,6 @@ public class SingleServiceImpl implements SingleService {
     public Single updateSingle(Long id, Single single) {
         Single existing = getSingleById(id);
         existing.setTitle(single.getTitle());
-        existing.setAlbum(single.getAlbum()); 
         return singleRepository.save(existing);
     }
 
