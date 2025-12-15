@@ -13,6 +13,16 @@ public class Album {
 
     private String title;
 
+    private Long artistId; 
+
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
 
