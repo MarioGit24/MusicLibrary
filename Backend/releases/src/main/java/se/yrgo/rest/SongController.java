@@ -26,11 +26,26 @@ public class SongController {
         return songService.getAllSongs();
     }
 
+    @GetMapping
+    public Song getSongById(@PathVariable Long id){
+        return songService.getSongById(id);
+
+    }
+
+    @PutMapping
+    public Song updateSong(@PathVariable Long id, Song song){
+        return songService.updateSong(id, song);
+    }
+
     @PostMapping
     public ResponseEntity<Song> createSong(@RequestBody Song song){
         Song newSong = songService.createSong(song);
         return new ResponseEntity<>(newSong, HttpStatus.CREATED);
     }
 
-    
+    @DeleteMapping
+    public ResponseEntity<Void> deleteSong(@PathVariable Long id) {
+        songService.deleteSong(id);
+        return ResponseEntity.noContent().build();
+    }
 }
