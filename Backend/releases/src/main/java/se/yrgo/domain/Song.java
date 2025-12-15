@@ -15,6 +15,10 @@ public class Song {
     @JoinColumn(name = "album_id")
     private Album album;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ep_id")
+    private Ep ep;
+
     public Song() {
     }
 

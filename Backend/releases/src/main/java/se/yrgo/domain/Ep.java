@@ -1,9 +1,8 @@
 package se.yrgo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.*;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Ep {
@@ -11,10 +10,9 @@ public class Ep {
     @Id
     private Long id;
     private String title;
-    // ska ha en lista av låtar
-    private Long artistId; 
-    
 
+    @OneToMany(mappedBy = "ep", cascade = CascadeType.ALL)
+    private List<Song> songs = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -61,14 +59,6 @@ public class Ep {
         } else if (!title.equals(other.title))
             return false;
         return true;
-    }
-
-    public Long getArtistId() {
-        return artistId;
-    }
-
-    public void setArtistId(Long artistId) {
-        this.artistId = artistId;
     }
 
 }
