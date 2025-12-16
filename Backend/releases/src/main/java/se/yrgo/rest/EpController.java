@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import se.yrgo.domain.Album;
 import se.yrgo.domain.Ep;
+import se.yrgo.dto.AlbumCreationRequestDTO;
+import se.yrgo.dto.EpCreationRequestDTO;
 import se.yrgo.service.EpService;
 
 
@@ -35,14 +38,11 @@ public class EpController {
     } 
 
     @GetMapping 
-    public List<Ep> getAllEps(){
+    public List<Ep> getAllEps(@RequestParam(required = false) Long recordlabelId){
+        if (recordlabelId != null){
+            return epService.getEpsByRecordlabel(recordlabelId);
+        }
         return epService.getEps(); 
-    }
-
-    @PostMapping
-    public ResponseEntity<Ep> createEp(@RequestBody Ep ep){
-        Ep createdEp = epService.createEp(ep);
-        return new ResponseEntity<>(createdEp, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -51,14 +51,21 @@ public class EpController {
     }
 
     @PutMapping("/{id}")
-    public Ep updateep(@PathVariable Long id, @RequestBody Ep ep) {
+    public Ep updateEp(@PathVariable Long id, @RequestBody Ep ep) {
         return epService.updateEp(id, ep);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteep(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEp(@PathVariable Long id) {
         epService.deleteEp(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Ep> createEpWithSongs(@RequestBody EpCreationRequestDTO requestDTO) {
+        // business logic??
+        Ep createdEp = epService.createEp(requestDTO);
+        return new ResponseEntity<>(createdEp, HttpStatus.CREATED);
     }
 
 

@@ -9,8 +9,25 @@ public class Ep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-    private String title;
+    private Long artistId; 
+    public Long getArtistId() {
+        return artistId;
+    }
 
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
+
+    private Long recordLabelId;
+    public Long getRecordLabelId() {
+        return recordLabelId;
+    }
+
+    public void setRecordLabelId(Long recordLabelId) {
+        this.recordLabelId = recordLabelId;
+    }
+
+    private String title;
     @OneToMany(mappedBy = "ep", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
 
@@ -67,6 +84,14 @@ public class Ep {
         } else if (!title.equals(other.title))
             return false;
         return true;
+    }
+
+    public void addSong(Song song) {
+        if (songs == null) {
+            songs = new ArrayList<>();
+        }
+        songs.add(song);
+        song.setEp(this);
     }
 
 }
