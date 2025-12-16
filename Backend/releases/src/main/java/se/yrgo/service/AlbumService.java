@@ -1,8 +1,8 @@
 package se.yrgo.service;
 
-import java.util.List;
+import java.util.*;
 
-import se.yrgo.domain.Album;
+import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 
 public interface AlbumService {
@@ -17,4 +17,5 @@ public interface AlbumService {
 
     Album createAlbum(AlbumCreationRequestDTO dto);
 
+    List<Album> getAlbumsByRecordlabel(Long recordlabelId);
 }

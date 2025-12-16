@@ -1,69 +1,36 @@
-package se.yrgo.single_ep.domain;
+package se.yrgo.dto;
+
+import java.util.*;
+
+import se.yrgo.domain.*;
 
 public class RecordlabelResponseDTO {
-    private Long recordlabelId;
-    private String artistName;
-    private String albumName;
-    private String epName;
-    private String singleName;
-    private String songName;
+    private Long id;
+    private String labelName;
+    private List<ArtistDTO> artists;
+    private List<ReleaseDTO> releases;
 
-    public RecordlabelResponseDTO(Long recordlabelId, String artistName, String albumName, String epName,
-            String singleName, String songName) {
-        this.recordlabelId = recordlabelId;
-        this.artistName = artistName;
-        this.albumName = albumName;
-        this.epName = epName;
-        this.singleName = singleName;
-        this.songName = songName;
+    public RecordlabelResponseDTO(Recordlabel label, List<ArtistDTO> artists, List<ReleaseDTO> releases) {
+        this.id = label.getId();
+        this.labelName = label.getName();
+        this.artists = artists;
+        this.releases = releases;
     }
 
-    public Long getRecordlabelId() {
-        return recordlabelId;
+    public Long getId() {
+        return id;
     }
 
-    public void setRecordlabelId(Long recordlabelId) {
-        this.recordlabelId = recordlabelId;
+    public String getLabelName() {
+        return labelName;
     }
 
-    public String getArtistName() {
-        return artistName;
+    public List<ArtistDTO> getArtists() {
+        return artists;
     }
 
-    public void setArtistName(String artistName) {
-        this.artistName = artistName;
-    }
-
-    public String getAlbumName() {
-        return albumName;
-    }
-
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
-
-    public String getEpName() {
-        return epName;
-    }
-
-    public void setEpName(String epName) {
-        this.epName = epName;
-    }
-
-    public String getSingleName() {
-        return singleName;
-    }
-
-    public void setSingleName(String singleName) {
-        this.singleName = singleName;
-    }
-
-    public String getSongName() {
-        return songName;
-    }
-
-    public void setSongName(String songName) {
-        this.songName = songName;
+    public List<ReleaseDTO> getReleases() {
+        return releases;
     }
 
 }

@@ -1,7 +1,5 @@
 package se.yrgo.domain;
 
-import com.fasterxml.jackson.annotation.*;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +9,8 @@ public class Artist {
     private Long id;
 
     private String name;
+
+    private Long recordlabelId;
 
     public Long getId() {
         return id;
@@ -28,12 +28,20 @@ public class Artist {
         this.name = name;
     }
 
-    public Recordlabel getRecordlabel() {
-        return recordlabel;
+    public Long getRecordlabelId() {
+        return recordlabelId;
     }
 
-    public void setRecordlabel(Recordlabel recordlabel) {
-        this.recordlabel = recordlabel;
+    public void setRecordabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
     }
+
+    // public Recordlabel getRecordlabel() {
+    // return recordlabel;
+    // }
+
+    // public void setRecordlabel(Recordlabel recordlabel) {
+    // this.recordlabel = recordlabel;
+    // }
 
 }

@@ -12,7 +12,7 @@ public class Album {
     private Long id;
     private String title;
     private Long artistId;
-    private Long recordLabelId;
+    private Long recordlabelId;
 
     public Long getArtistId() {
         return artistId;
@@ -60,6 +60,14 @@ public class Album {
         this.songs = songs;
     }
 
+    public Long getRecordLabelId() {
+        return recordlabelId;
+    }
+
+    public void setRecordLabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -79,4 +87,5 @@ public class Album {
     public String toString() {
         return "Album{id=" + id + ", title='" + title + "'}";
     }
+
 }

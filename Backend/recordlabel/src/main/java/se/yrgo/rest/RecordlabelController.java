@@ -1,14 +1,12 @@
 package se.yrgo.rest;
 
-import java.util.*;
-
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import se.yrgo.domain.*;
+import se.yrgo.dto.*;
 import se.yrgo.service.*;
-import se.yrgo.single_ep.domain.*;
 
 @RestController
 @RequestMapping("/recordlabels")
@@ -22,14 +20,30 @@ public class RecordlabelController {
         this.recordlabelService = recordlabelService;
     }
 
-    @GetMapping("/detailed")
-    public List<RecordlabelResponseDTO> getAllRecordlabels() {
-        return recordlabelService.getAllRecordlabels();
+    @PostMapping
+    public ResponseEntity<Void> createLabel(@RequestBody Recordlabel recordlabel) {
+        recordlabelService.createRecordlabel(recordlabel);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public ResponseEntity<String> createRecordlabel(@RequestBody Recordlabel recordlabel) {
-        recordlabelService.createRecordlabel(recordlabel);
-        return ResponseEntity.ok("Record label created succesfully!");
+    @PutMapping("/{recordlabelId}/enroll-artist/{artistId}")
+    public ResponseEntity<String> enrollArtist(@PathVariable Long recordlabelId, @PathVariable Long artistId) {
+        boolean success = recordlabelService.enrollArtist(artistId, recordlabelId);
+        if (success) {
+            return ResponseEntity.ok("Artist " + artistId + " enrolled in Label " + recordlabelId);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to enroll artist");
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecordlabelResponseDTO> getLabelById(@PathVariable Long id) {
+        RecordlabelResponseDTO labelDetails = recordlabelService.getRecordlabelDetails(id);
+        return ResponseEntity.ok(labelDetails);
+    }
+
+    // @GetMapping("/{id}")
+    // public Album getAlbum(@PathVariable Long id) {
+    // return albumService.getAlbumById(id);
+    // }
+
 }

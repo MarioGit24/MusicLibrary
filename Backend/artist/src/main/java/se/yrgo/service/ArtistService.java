@@ -11,4 +11,8 @@ public interface ArtistService {
     public Artist getArtist(Long id);
 
     public Artist createArtist(Artist artist);
+
+    public Artist updateArtistLabel(Long artistId, Long recordlabelId);
+
+    public List<Artist> findByRecordlabelId(Long recordlabelId);
 }

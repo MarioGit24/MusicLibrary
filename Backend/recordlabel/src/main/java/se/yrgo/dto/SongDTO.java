@@ -1,8 +1,9 @@
-package main.java.se.yrgo.dto;
+package se.yrgo.dto;
 
 public class SongDTO {
     private Long id;
     private String title;
+    private int duration;
 
     public Long getId() {
         return id;
@@ -19,4 +20,13 @@ public class SongDTO {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
 }

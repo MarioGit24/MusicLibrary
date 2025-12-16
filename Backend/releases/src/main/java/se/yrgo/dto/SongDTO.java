@@ -1,8 +1,13 @@
 package se.yrgo.dto;
 
-class SongCreationDTO {
+public class SongDTO {
     private String title;
     private int duration;
+
+    public SongDTO(String title, int duration) {
+        this.title = title;
+        this.duration = duration;
+    }
 
     public String getTitle() {
         return title;

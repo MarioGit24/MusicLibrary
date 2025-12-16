@@ -5,10 +5,10 @@ import java.util.*;
 public class AlbumCreationRequestDTO {
     private String title;
     private Long artistId;
-    private Long labelId;
-    private List<SongCreationDTO> songsList;
+    private Long recordlabelId;
+    private List<SongDTO> songsList;
 
-    public List<SongCreationDTO> getSongsList() {
+    public List<SongDTO> getSongsList() {
         return songsList;
     }
 
@@ -28,15 +28,15 @@ public class AlbumCreationRequestDTO {
         this.artistId = artistId;
     }
 
-    public Long getLabelId() {
-        return labelId;
+    public Long getRecordlabelId() {
+        return recordlabelId;
     }
 
-    public void setLabelId(Long labelId) {
-        this.labelId = labelId;
+    public void setRecordlabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
     }
 
-    public void setSongsList(List<SongCreationDTO> songsList) {
+    public void setSongsList(List<SongDTO> songsList) {
         this.songsList = songsList;
     }
 

@@ -29,7 +29,7 @@ public class AlbumServiceImpl implements AlbumService {
         Album album = new Album();
         album.setTitle(dto.getTitle());
         album.setArtistId(dto.getArtistId());
-        album.setLabelId(dto.getLabelId());
+        album.setRecordLabelId(dto.getRecordlabelId());
 
         if (dto.getSongsList() != null) {
             dto.getSongsList().forEach(songDto -> {
@@ -60,5 +60,10 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public void deleteAlbum(Long id) {
         albumRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Album> getAlbumsByRecordlabel(Long recordlabelId) {
+        return albumRepository.findByRecordlabelId(recordlabelId);
     }
 }

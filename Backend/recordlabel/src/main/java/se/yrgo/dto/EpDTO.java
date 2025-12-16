@@ -1,4 +1,4 @@
-package main.java.se.yrgo.dto;
+package se.yrgo.dto;
 
 public class EpDTO {
     private Long id;

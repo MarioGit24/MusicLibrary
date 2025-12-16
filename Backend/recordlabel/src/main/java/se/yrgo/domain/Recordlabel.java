@@ -8,6 +8,26 @@ public class Recordlabel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // TODO: remove fields below???
+
     private Long artistId;
 
     private Long albumId;
@@ -17,14 +37,6 @@ public class Recordlabel {
     private Long singleId;
 
     private Long songId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getArtistId() {
         return artistId;

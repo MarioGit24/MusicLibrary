@@ -10,6 +10,7 @@ public class Song {
     private Long id;
 
     private String title;
+    private int duration;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id")
@@ -46,6 +47,22 @@ public class Song {
         this.album = album;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public Ep getEp() {
+        return ep;
+    }
+
+    public void setEp(Ep ep) {
+        this.ep = ep;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -65,4 +82,5 @@ public class Song {
     public String toString() {
         return "Song{id=" + id + ", title='" + title + "'}";
     }
+
 }

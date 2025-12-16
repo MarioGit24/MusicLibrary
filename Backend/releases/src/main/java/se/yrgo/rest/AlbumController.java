@@ -22,15 +22,18 @@ public class AlbumController {
     }
 
     @GetMapping
-    public List<Album> getAllAlbums() {
+    public List<Album> getAllAlbums(@RequestParam(required = false) Long recordlabelId) {
+        if (recordlabelId != null) {
+            return albumService.getAlbumsByRecordlabel(recordlabelId);
+        }
         return albumService.getAllAlbums();
     }
 
-    @PostMapping
-    public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
-        Album createdAlbum = albumService.createAlbum(album);
-        return new ResponseEntity<>(createdAlbum, HttpStatus.CREATED);
-    }
+    // @PostMapping
+    // public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
+    // Album createdAlbum = albumService.createAlbum(album);
+    // return new ResponseEntity<>(createdAlbum, HttpStatus.CREATED);
+    // }
 
     @GetMapping("/{id}")
     public Album getAlbum(@PathVariable Long id) {
@@ -50,7 +53,7 @@ public class AlbumController {
 
     @PostMapping
     public ResponseEntity<Album> createAlbumWithSongs(@RequestBody AlbumCreationRequestDTO requestDTO) {
-        // Delegate the business logic to the service
+        // business logic??
         Album createdAlbum = albumService.createAlbum(requestDTO);
         return new ResponseEntity<>(createdAlbum, HttpStatus.CREATED);
     }
