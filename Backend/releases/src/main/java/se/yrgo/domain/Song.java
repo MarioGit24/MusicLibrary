@@ -10,12 +10,18 @@ public class Song {
     private Long id;
 
     private String title;
+    private int duration;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id")
     private Album album;
 
-    public Song() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ep_id")
+    private Ep ep;
+
+    public Song() {
+    }
 
     public Long getId() {
         return id;
@@ -41,10 +47,28 @@ public class Song {
         this.album = album;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public Ep getEp() {
+        return ep;
+    }
+
+    public void setEp(Ep ep) {
+        this.ep = ep;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Song)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Song))
+            return false;
         Song song = (Song) o;
         return id != null && id.equals(song.id);
     }
@@ -58,4 +82,5 @@ public class Song {
     public String toString() {
         return "Song{id=" + id + ", title='" + title + "'}";
     }
+
 }

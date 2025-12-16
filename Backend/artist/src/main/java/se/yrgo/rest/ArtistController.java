@@ -21,8 +21,16 @@ public class ArtistController {
     }
 
     @GetMapping
-    public List<Artist> getAllArtists() {
+    public List<Artist> getAllArtists(@RequestParam(required = false) Long recordlabelId) {
+        if (recordlabelId != null) {
+            return artistService.findByRecordlabelId(recordlabelId);
+        }
         return artistService.getAllArtists();
+    }
+
+    @GetMapping("/{id}")
+    public Artist getArtistById(@PathVariable Long id) {
+        return artistService.getArtist(id);
     }
 
     @PostMapping
@@ -30,4 +38,11 @@ public class ArtistController {
         Artist createdArtist = artistService.createArtist(artist);
         return new ResponseEntity<>(createdArtist, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}/assign-label")
+    public ResponseEntity<Artist> assignToLabel(@PathVariable Long id, @RequestParam Long recordlabelId) {
+        Artist updatedArtist = artistService.updateArtistLabel(id, recordlabelId);
+        return ResponseEntity.ok(updatedArtist);
+    }
+
 }

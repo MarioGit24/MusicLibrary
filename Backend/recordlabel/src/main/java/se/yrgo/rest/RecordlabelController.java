@@ -1,12 +1,11 @@
 package se.yrgo.rest;
 
-import java.util.*;
-
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import se.yrgo.domain.*;
+import se.yrgo.dto.*;
 import se.yrgo.service.*;
 
 @RestController
@@ -21,33 +20,30 @@ public class RecordlabelController {
         this.recordlabelService = recordlabelService;
     }
 
-    @GetMapping
-    public List<Recordlabel> getAllRecordlabels() {
-        return recordlabelService.getAllRecordlabels();
-    }
-
     @PostMapping
-    public ResponseEntity<String> createRecordlabel(@RequestBody Recordlabel recordlabel) {
+    public ResponseEntity<Void> createLabel(@RequestBody Recordlabel recordlabel) {
         recordlabelService.createRecordlabel(recordlabel);
-        return ResponseEntity.ok("Record label created succesfully!");
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    // assign artist to record label
-    @PostMapping("/enrollArtist")
-    public ResponseEntity<String> enrollArtistInRecordlabel(
-            @RequestParam Long artistId,
-            @RequestParam Long recordlabelId) {
-
+    @PutMapping("/{recordlabelId}/enroll-artist/{artistId}")
+    public ResponseEntity<String> enrollArtist(@PathVariable Long recordlabelId, @PathVariable Long artistId) {
         boolean success = recordlabelService.enrollArtist(artistId, recordlabelId);
-
-        if (!success) {
-            return ResponseEntity.badRequest()
-                    .body("Invalid recordlabel or artist ID provided.");
+        if (success) {
+            return ResponseEntity.ok("Artist " + artistId + " enrolled in Label " + recordlabelId);
         }
-
-        return ResponseEntity.ok(
-                "Enrollment successful: Artist ID " + artistId +
-                        " linked to Recordlabel ID " + recordlabelId);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to enroll artist");
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RecordlabelResponseDTO> getLabelById(@PathVariable Long id) {
+        RecordlabelResponseDTO labelDetails = recordlabelService.getRecordlabelDetails(id);
+        return ResponseEntity.ok(labelDetails);
+    }
+
+    // @GetMapping("/{id}")
+    // public Album getAlbum(@PathVariable Long id) {
+    // return albumService.getAlbumById(id);
+    // }
 
 }

@@ -1,13 +1,14 @@
 package se.yrgo.service;
 
-import java.util.*;
-
 import se.yrgo.domain.*;
+import se.yrgo.dto.*;
 
 public interface RecordlabelService {
-    List<Recordlabel> getAllRecordlabels();
-
-    void createRecordlabel(Recordlabel recordlabel);
 
     boolean enrollArtist(Long artistId, Long recordlabelId);
+
+    RecordlabelResponseDTO getRecordlabelDetails(Long recordlabelId);
+
+    Recordlabel createRecordlabel(Recordlabel recordlabel);
+
 }

@@ -1,13 +1,11 @@
 package se.yrgo.data;
 
-import java.util.*;
-
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
 
 import se.yrgo.domain.*;
 
 @Repository
-public interface ArtistRepository extends JpaRepository<Artist, Long> {
-    List<Artist> findByRecordlabelId(Long recordlabelId);
+public interface ReleaseRepository extends JpaRepository<Ep, Long> {
+
 }

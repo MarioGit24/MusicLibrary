@@ -15,6 +15,10 @@ public class ArtistServiceImpl implements ArtistService {
         this.artistRepository = artistRepository;
     }
 
+    public Artist getArtist(Long id) {
+        return artistRepository.findById(id).orElseThrow(() -> new RuntimeException("Artist not found"));
+    }
+
     @Override
     public List<Artist> getAllArtists() {
         return artistRepository.findAll();
@@ -25,4 +29,17 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.save(artist);
     }
 
+    @Override
+    public Artist updateArtistLabel(Long artistId, Long recordlabelId) {
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        artist.setRecordabelId(recordlabelId);
+        return artistRepository.save(artist);
+    }
+
+    @Override
+    public List<Artist> findByRecordlabelId(Long recordlabelId) {
+        return artistRepository.findByRecordlabelId(recordlabelId);
+    }
 }

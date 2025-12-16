@@ -1,7 +1,11 @@
 package se.yrgo.data;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.*;
 
-import se.yrgo.domain.Album;
+import org.springframework.data.jpa.repository.*;
 
-public interface AlbumRepository extends JpaRepository<Album, Long> {}
+import se.yrgo.domain.*;
+
+public interface AlbumRepository extends JpaRepository<Album, Long> {
+    List<Album> findByRecordlabelId(Long recordlabelId);
+}

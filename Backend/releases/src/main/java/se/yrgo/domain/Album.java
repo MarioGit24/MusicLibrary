@@ -1,7 +1,6 @@
 package se.yrgo.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
 
@@ -13,21 +12,29 @@ public class Album {
     private Long id;
     private String title;
     private Long artistId;
-    private Long recordLabelId;
+    private Long recordlabelId;
 
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
+
+    public Album() {
+    }
 
     public void addSong(Song song) {
         if (songs == null) {
             songs = new ArrayList<>();
         }
         songs.add(song);
-        song.setAlbum(this); 
+        song.setAlbum(this);
     }
-    
-    public Album() {}
 
     public Long getId() {
         return id;
@@ -53,10 +60,20 @@ public class Album {
         this.songs = songs;
     }
 
+    public Long getRecordLabelId() {
+        return recordlabelId;
+    }
+
+    public void setRecordLabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Album)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Album))
+            return false;
         Album album = (Album) o;
         return id != null && id.equals(album.id);
     }
@@ -70,4 +87,5 @@ public class Album {
     public String toString() {
         return "Album{id=" + id + ", title='" + title + "'}";
     }
+
 }
