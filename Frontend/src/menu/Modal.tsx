@@ -26,6 +26,24 @@ const style = {
   transform: "translate(-50%, -50%)",
 };
 
+const inputStyle = {
+  background: "#d7d7d718",
+  borderRadius: 2,
+  mb: 1,
+  input: {
+    color: "#aea5afff",
+    "&::placeholder": {
+      color: "#8e7990e4",
+    },
+  },
+  fieldset: { borderColor: "#aea5af23" },
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "#aea5af23",
+    },
+  },
+};
+
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<any>>;
@@ -37,15 +55,8 @@ function ModalMenu({ open, setOpen, type }: Props) {
 
   const [artists, setArtists] = useState<{ id: number; name: string }[]>([]);
 
-  const [artistFormData, setArtistFormData] = useState({
-    name: "",
-  });
-
-  const [releaseFormData, setReleaseFormData] = useState({
-    title: "",
-    duration: 0,
-  });
-
+  const [artistFormData, setArtistFormData] = useState({ name: "" });
+  const [releaseFormData, setReleaseFormData] = useState({ title: "", duration: "" });
   const [albumFormData, setAlbumFormData] = useState({
     title: "",
     artistId: "",
@@ -55,7 +66,6 @@ function ModalMenu({ open, setOpen, type }: Props) {
       { title: "", duration: "" },
     ],
   });
-
   const [epFormData, setEpFormData] = useState({
     title: "",
     artistId: "",
@@ -65,55 +75,6 @@ function ModalMenu({ open, setOpen, type }: Props) {
     ],
   });
 
-  const handleChangeArtist = (e: any) => {
-    const { name, value } = e.target;
-    setArtistFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleChangeSingle = (e: any) => {
-    const { name, value } = e.target;
-    setReleaseFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleAlbumChange = (e: any) => {
-    const { name, value } = e.target;
-    setAlbumFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  const handleEpChange = (e: any) => {
-    const { name, value } = e.target;
-    setEpFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleAlbumSongChange = (index: number, field: string, value: string) => {
-    const updatedSongs = [...albumFormData.songs];
-    updatedSongs[index] = { ...updatedSongs[index], [field]: value };
-    setAlbumFormData((prevState) => ({
-      ...prevState,
-      songs: updatedSongs,
-    }));
-  };
-
-  const handleEpSongChange = (index: number, field: string, value: string) => {
-    const updatedSongs = [...epFormData.songs];
-    updatedSongs[index] = { ...updatedSongs[index], [field]: value };
-    setEpFormData((prevState) => ({
-      ...prevState,
-      songs: updatedSongs,
-    }));
-  };
-
   useEffect(() => {
     const fetchArtists = async () => {
       try {
@@ -121,586 +82,172 @@ function ModalMenu({ open, setOpen, type }: Props) {
         const data = await response.json();
         setArtists(data);
       } catch (error) {
-        console.error("Error fetching dashboard:", error);
+        console.error("Error fetching artists:", error);
       }
     };
+    if (open) fetchArtists();
+  }, [open]);
 
-    fetchArtists();
-  }, []);
+  // --- API FUNCTIONS ---
 
   async function createAndEnrollArtist() {
-    let artistId;
     try {
       const response = await fetch("http://localhost:8082/artists", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: artistFormData.name,
-        }),
+        body: JSON.stringify({ name: artistFormData.name }),
       });
-
       if (response.ok) {
         const data = await response.json();
-        artistId = data.id;
-        console.log("Artist created with ID:", data.id);
-      }
-    } catch (error) {
-      console.error("Error creating artist:", error);
-    }
-    try {
-      const response = await fetch(
-        `http://localhost:8081/recordlabels/1/enroll-artist/${artistId}`,
-        // hardcoded record label id since we only will have one record label
-        {
+        await fetch(`http://localhost:8081/recordlabels/1/enroll-artist/${data.id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (response.ok) {
-        const text = await response.text();
-        console.log(text);
+        });
+        window.location.reload();
       }
     } catch (error) {
-      console.error("Error enrolling artist:", error);
+      console.error("Error:", error);
     }
   }
 
   async function createAlbum() {
-    const albumData = {
+    const data = {
       title: albumFormData.title,
       artistId: albumFormData.artistId,
-      recordlabelId: 1, // hardcoded label
-      songsList: albumFormData.songs.map((song) => ({
-        title: song.title,
-        duration: parseInt(song.duration) || 0,
+      recordlabelId: 1,
+      songsList: albumFormData.songs.map((s) => ({
+        title: s.title,
+        duration: parseInt(s.duration) || 0,
       })),
-    };   
-
-    try {
-      const response = await fetch("http://localhost:8083/albums", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(albumData),
-      });
-
-      if (response.ok) {
-        console.log("Album created successfully");
-      }
-    } catch (error) {
-      console.error("Error creating album:", error);
-    }
+    };
+    const res = await fetch("http://localhost:8083/albums", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) window.location.reload();
   }
 
   async function createEp() {
-    const epData = {
+    const data = {
       title: epFormData.title,
-      artistId: epFormData.artistId,
-      recordlabelId: 1, // hardcoded label
-      songsList: epFormData.songs.map((song) => ({
-        title: song.title,
-        duration: parseInt(song.duration) || 0,
+      artistId: albumFormData.artistId, // Återanvänder artistId från samma selector
+      recordlabelId: 1,
+      songsList: epFormData.songs.map((s) => ({
+        title: s.title,
+        duration: parseInt(s.duration) || 0,
       })),
     };
-        try {
-      const response = await fetch("http://localhost:8083/eps", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(epData),
-      });
-
-      if (response.ok) {
-        console.log("EP created successfully");
-      }
-    } catch (error) {
-      console.error("Error creating EP:", error);
-    }
-
+    const res = await fetch("http://localhost:8083/eps", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) window.location.reload();
   }
 
   async function createSingle() {
-    console.log("Single");
+    const data = {
+      title: releaseFormData.title,
+      duration: parseInt(releaseFormData.duration) || 0,
+      artistId: albumFormData.artistId, 
+      recordlabelId: 1,
+    };
+    const res = await fetch("http://localhost:8083/singles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) window.location.reload();
   }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    if (type === "artist") {
-      createAndEnrollArtist();
-    } else if (type === "single") {
-      createSingle();
-    } else if (type === "album") {
-      createAlbum();
-    } else if (type == "EP") {
-      createEp(); 
-    }
+    if (type === "artist") await createAndEnrollArtist();
+    else if (type === "single") await createSingle();
+    else if (type === "album") await createAlbum();
+    else if (type.toLowerCase() === "ep") await createEp();
     handleClose();
   };
 
   return (
-    <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Typography
-              id="transition-modal-title"
-              variant="h6"
-              component="h2"
-              style={{ color: "#9e79a1ff" }}
-            >
-              Create {type}
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{
-                gap: 2,
-                flex: 1,
-                overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              {type === "artist" ? (
-                <TextField
-                  placeholder="Add a name..."
-                  name="name"
-                  value={artistFormData.name}
-                  onChange={handleChangeArtist}
-                  fullWidth
-                  sx={{
-                    mt: 2,
-                    background: "#d7d7d718",
-                    borderRadius: 2,
-                    input: {
-                      color: "#aea5afff",
-                      "&::placeholder": {
-                        color: "#8e7990e4",
-                      },
-                    },
-                    fieldset: { borderColor: "#aea5af23" },
-                    "& .MuiOutlinedInput-root": {
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#aea5af23",
-                      },
-                    },
-                  }}
-                />
-              ) : type === "single" ? (
-                <>
-                  <TextField
-                    placeholder="Add a title..."
-                    name="title"
-                    value={releaseFormData.title}
-                    onChange={handleChangeSingle}
-                    fullWidth
-                    sx={{
-                      mt: 2,
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        "&::placeholder": {
-                          color: "#8e7990e4",
-                        },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#aea5af23",
-                        },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a duration..."
-                    name="duration"
-                    value={releaseFormData.duration}
-                    onChange={handleChangeSingle}
-                    fullWidth
-                    sx={{
-                      mt: 2,
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        "&::placeholder": {
-                          color: "#8e7990e4",
-                        },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#aea5af23",
-                        },
-                      },
-                    }}
-                  />
-                </>
-             ) : type.toLowerCase() === "ep" ? (
-                <>
-                  {/* EP SECTION START */}
-                  <TextField
-                    placeholder="Add an EP title..."
-                    name="title"
-                    value={epFormData.title}
-                    onChange={handleEpChange}
-                    fullWidth
-                    sx={{
-                      mt: 2,
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": {
-                          color: "#8e7990e4",
-                        },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#aea5af23",
-                        },
-                      },
-                    }}
-                  />
+    <Modal open={open} onClose={handleClose} closeAfterTransition slots={{ backdrop: Backdrop }}>
+      <Fade in={open}>
+        <Box sx={style}>
+          <Typography variant="h6" sx={{ color: "#9e79a1ff", mb: 2 }}>
+            Create {type.toUpperCase()}
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            
+            {type === "artist" && (
+              <TextField placeholder="Artist Name" value={artistFormData.name} onChange={(e) => setArtistFormData({ name: e.target.value })} fullWidth sx={inputStyle} />
+            )}
 
-                  {/* SONG 1 */}
-                  <p>Song 1:</p>
-                  <TextField
-                    placeholder="Add a song title..."
-                    value={epFormData.songs[0].title}
-                    onChange={(e) =>
-                      handleEpSongChange(0, "title", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a song duration..."
-                    value={epFormData.songs[0].duration}
-                    onChange={(e) =>
-                      handleEpSongChange(0, "duration", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
+            {type === "single" && (
+              <>
+                <TextField placeholder="Single Title" value={releaseFormData.title} onChange={(e) => setReleaseFormData({ ...releaseFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                <TextField placeholder="Duration (seconds)" value={releaseFormData.duration} onChange={(e) => setReleaseFormData({ ...releaseFormData, duration: e.target.value })} fullWidth sx={inputStyle} />
+              </>
+            )}
 
-                  {/* SONG 2 */}
-                  <p>Song 2:</p>
-                  <TextField
-                    placeholder="Add a song title..."
-                    value={epFormData.songs[1].title}
-                    onChange={(e) =>
-                      handleEpSongChange(1, "title", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a song duration..."
-                    value={epFormData.songs[1].duration}
-                    onChange={(e) =>
-                      handleEpSongChange(1, "duration", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  {/* ALBUM SECTION START */}
-                  <TextField
-                    placeholder="Add an album title..."
-                    name="title"
-                    value={albumFormData.title}
-                    onChange={handleAlbumChange}
-                    fullWidth
-                    sx={{
-                      mt: 2,
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": {
-                          color: "#8e7990e4",
-                        },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "#aea5af23",
-                        },
-                      },
-                    }}
-                  />
+            {type.toLowerCase() === "ep" && (
+              <>
+                <TextField placeholder="EP Title" value={epFormData.title} onChange={(e) => setEpFormData({ ...epFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                {epFormData.songs.map((song, i) => (
+                  <Box key={i} sx={{ display: "flex", gap: 1 }}>
+                    <TextField placeholder={`Song ${i + 1} Title`} value={song.title} onChange={(e) => {
+                      const newSongs = [...epFormData.songs];
+                      newSongs[i].title = e.target.value;
+                      setEpFormData({ ...epFormData, songs: newSongs });
+                    }} fullWidth sx={inputStyle} />
+                    <TextField placeholder="Sec" value={song.duration} onChange={(e) => {
+                      const newSongs = [...epFormData.songs];
+                      newSongs[i].duration = e.target.value;
+                      setEpFormData({ ...epFormData, songs: newSongs });
+                    }} sx={{ ...inputStyle, width: "100px" }} />
+                  </Box>
+                ))}
+              </>
+            )}
 
-                  {/* SONG 1 */}
-                  <p>Song 1:</p>
-                  <TextField
-                    placeholder="Add a song title..."
-                    value={albumFormData.songs[0].title}
-                    onChange={(e) =>
-                      handleAlbumSongChange(0, "title", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a song duration..."
-                    value={albumFormData.songs[0].duration}
-                    onChange={(e) =>
-                      handleAlbumSongChange(0, "duration", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
+            {type === "album" && (
+              <>
+                <TextField placeholder="Album Title" value={albumFormData.title} onChange={(e) => setAlbumFormData({ ...albumFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                {albumFormData.songs.map((song, i) => (
+                  <Box key={i} sx={{ display: "flex", gap: 1 }}>
+                    <TextField placeholder={`Song ${i + 1} Title`} value={song.title} onChange={(e) => {
+                      const newSongs = [...albumFormData.songs];
+                      newSongs[i].title = e.target.value;
+                      setAlbumFormData({ ...albumFormData, songs: newSongs });
+                    }} fullWidth sx={inputStyle} />
+                    <TextField placeholder="Sec" value={song.duration} onChange={(e) => {
+                      const newSongs = [...albumFormData.songs];
+                      newSongs[i].duration = e.target.value;
+                      setAlbumFormData({ ...albumFormData, songs: newSongs });
+                    }} sx={{ ...inputStyle, width: "100px" }} />
+                  </Box>
+                ))}
+              </>
+            )}
 
-                  {/* SONG 2 */}
-                  <p>Song 2:</p>
-                  <TextField
-                    placeholder="Add a song title..."
-                    value={albumFormData.songs[1].title}
-                    onChange={(e) =>
-                      handleAlbumSongChange(1, "title", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a song duration..."
-                    value={albumFormData.songs[1].duration}
-                    onChange={(e) =>
-                      handleAlbumSongChange(1, "duration", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-
-                  {/* SONG 3 */}
-                  <p>Song 3:</p>
-                  <TextField
-                    placeholder="Add a song title..."
-                    value={albumFormData.songs[2].title}
-                    onChange={(e) =>
-                      handleAlbumSongChange(2, "title", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a song duration..."
-                    value={albumFormData.songs[2].duration}
-                    onChange={(e) =>
-                      handleAlbumSongChange(2, "duration", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                </>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+              {type !== "artist" && (
+                <FormControl variant="filled" size="small" sx={{ width: 200, background: "#d7d7d718", borderRadius: 2 }}>
+                  <InputLabel sx={{ color: "#8e7990e4" }}>Select Artist</InputLabel>
+                  <Select value={albumFormData.artistId} onChange={(e) => setAlbumFormData({ ...albumFormData, artistId: e.target.value as string })} sx={{ color: "#aea5afff" }}>
+                    {artists.map((a) => (
+                      <MenuItem key={a.id} value={a.id}>{a.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               )}
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: 6,
-                  justifyContent: "space-between",
-                }}
-              >
-                {(type.toLowerCase() === "album" || type.toLowerCase() === "ep") && (
-                  <FormControl
-                    variant="filled"
-                    size="small"
-                    sx={{
-                      width: 110,
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      "& .MuiSelect-select": {
-                        color: "#aea5afff",
-                      },
-                      "& .MuiFilledInput-root": {
-                        "&:before": {
-                          borderBottomColor: "#aea5af23",
-                        },
-
-                        "&:hover:not(.Mui-disabled):before": {
-                          borderBottomColor: "#aea5afff",
-                        },
-                        "&:after": {
-                          borderBottomColor: "#aea5afff",
-                        },
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "#8e7990e4",
-                        "&.Mui-focused": {
-                          color: "#aea5afff",
-                        },
-                      },
-                    }}
-                  >
-                    <InputLabel>Artist</InputLabel>
-                    <Select
-                      name="artistId"
-                      value={albumFormData.artistId}
-                      onChange={handleAlbumChange}
-                    >
-                      {artists.map((artist) => (
-                        <MenuItem key={artist.id} value={artist.id}>
-                          {artist.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-                <Button
-                  type="submit"
-                  style={{
-                    color: "#8F6D92",
-                    background: "#16161693",
-                  }}
-                >
-                  Create
-                </Button>
-              </div>
+              <Button type="submit" variant="contained" sx={{ bgcolor: "#8F6D92", "&:hover": { bgcolor: "#7a5c7d" } }}>
+                Create
+              </Button>
             </Box>
           </Box>
-        </Fade>
-      </Modal>
-    </div>
+        </Box>
+      </Fade>
+    </Modal>
   );
 }
 
