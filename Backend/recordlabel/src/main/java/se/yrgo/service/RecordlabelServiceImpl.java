@@ -29,8 +29,13 @@ public class RecordlabelServiceImpl implements RecordlabelService {
     }
 
     @Override
-    public Recordlabel createRecordlabel(Recordlabel label) {
-        return recordlabelRepository.save(label);
+    public RecordlabelResponseDTO createRecordlabel(RecordlabelRequestDTO dto) {
+        Recordlabel label = new Recordlabel();
+        label.setName(dto.getLabelName());
+        
+        Recordlabel savedLabel = recordlabelRepository.save(label);
+        
+        return new RecordlabelResponseDTO(savedLabel, new ArrayList<>(), new ArrayList<>());
     }
 
     @Override
@@ -41,25 +46,26 @@ public class RecordlabelServiceImpl implements RecordlabelService {
         List<ArtistDTO> artists = restClient.get()
                 .uri(artistServiceUrl + "?labelId=" + recordlabelId)
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ArtistDTO>>() {
-                });
+                .body(new ParameterizedTypeReference<List<ArtistDTO>>() {});
 
-        List<ReleaseDTO> albums = restClient.get()
+        List<ReleaseDTO> releases = restClient.get()
                 .uri(releasesServiceUrl + "?recordlabelId=" + recordlabelId)
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ReleaseDTO>>() {
-                });
+                .body(new ParameterizedTypeReference<List<ReleaseDTO>>() {});
 
-        return new RecordlabelResponseDTO(label, artists, albums);
+        return new RecordlabelResponseDTO(label, artists, releases);
     }
 
     @Override
     public boolean enrollArtist(Long artistId, Long recordlabelId) {
-        restClient.put()
-                .uri(artistServiceUrl + "/" + artistId + "/assign-label?recordlabelId=" + recordlabelId)
-                .retrieve()
-                .toBodilessEntity();
-
-        return true;
+        try {
+            restClient.put()
+                    .uri(artistServiceUrl + "/" + artistId + "/assign-label?recordlabelId=" + recordlabelId)
+                    .retrieve()
+                    .toBodilessEntity();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
