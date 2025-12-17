@@ -8,7 +8,6 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private int duration;
 
@@ -20,7 +19,12 @@ public class Song {
     @JoinColumn(name = "ep_id")
     private Ep ep;
 
-    public Song() {
+    public Song() {}
+
+    public Song(String title, int duration){ 
+        this.title = title;
+        this.duration = duration;
+
     }
 
     public Long getId() {

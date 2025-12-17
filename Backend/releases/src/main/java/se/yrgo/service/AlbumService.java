@@ -2,20 +2,19 @@ package se.yrgo.service;
 
 import java.util.*;
 
-import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 
 public interface AlbumService {
 
-    List<Album> getAllAlbums();
+    List<AlbumResponseDTO> getAllAlbums();
 
-    Album getAlbumById(Long id);
+    AlbumResponseDTO getAlbumById(Long id);
 
-    Album updateAlbum(Long id, Album album);
+    AlbumResponseDTO updateAlbum(Long id, AlbumCreationRequestDTO album);
 
     void deleteAlbum(Long id);
 
-    Album createAlbum(AlbumCreationRequestDTO dto);
+    AlbumResponseDTO createAlbum(AlbumCreationRequestDTO dto);
 
-    List<Album> getAlbumsByRecordlabel(Long recordlabelId);
+    List<AlbumResponseDTO> getAlbumsByRecordlabel(Long recordlabelId);
 }

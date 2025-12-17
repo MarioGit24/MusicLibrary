@@ -1,60 +1,68 @@
 package se.yrgo.service;
 
-import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.stereotype.*;
-import org.springframework.transaction.annotation.*;
+import org.springframework.stereotype.Service;
 
-import se.yrgo.data.*;
+import se.yrgo.data.AlbumRepository;
 import se.yrgo.domain.*;
 import se.yrgo.dto.*;
+
 
 @Service
 public class AlbumServiceImpl implements AlbumService {
 
     private final AlbumRepository albumRepository;
-
+    
     public AlbumServiceImpl(AlbumRepository albumRepository) {
         this.albumRepository = albumRepository;
     }
 
     @Override
-    public List<Album> getAllAlbums() {
-        return albumRepository.findAll();
+    public List<AlbumResponseDTO> getAllAlbums() {
+        return albumRepository.findAll().stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
-    public Album createAlbum(AlbumCreationRequestDTO dto) {
+    public AlbumResponseDTO createAlbum(AlbumCreationRequestDTO dto) {
         Album album = new Album();
         album.setTitle(dto.getTitle());
         album.setArtistId(dto.getArtistId());
-        album.setRecordLabelId(dto.getRecordlabelId());
+        album.setRecordlabelId(dto.getRecordlabelId());
 
         if (dto.getSongsList() != null) {
-            dto.getSongsList().forEach(songDto -> {
-                Song song = new Song();
-                song.setTitle(songDto.getTitle());
-                song.setDuration(songDto.getDuration());
-
-                album.addSong(song);
-            });
+            for (SongDTO sDto : dto.getSongsList()) {
+                Song song = new Song(sDto.getTitle(), sDto.getDuration());
+                song.setAlbum(album); 
+                album.getSongs().add(song);
+            }
         }
 
-        return albumRepository.save(album);
+        Album savedAlbum = albumRepository.save(album);
+        return convertToDTO(savedAlbum); 
     }
 
     @Override
-    public Album getAlbumById(Long id) {
-        return albumRepository.findById(id).orElseThrow(() -> new RuntimeException("Album was not found"));
+    public AlbumResponseDTO getAlbumById(Long id) {
+        Album album = albumRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Album was not found"));
+        return convertToDTO(album); 
     }
 
     @Override
-    public Album updateAlbum(Long id, Album album) {
-        Album existing = getAlbumById(id);
-        existing.setTitle(album.getTitle());
-        existing.setSongs(album.getSongs());
-        return albumRepository.save(existing);
+    public AlbumResponseDTO updateAlbum(Long id, AlbumCreationRequestDTO dto) {
+        Album existing = albumRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Album not found"));
+            
+        existing.setTitle(dto.getTitle());
+        existing.setArtistId(dto.getArtistId());
+        existing.setRecordlabelId(dto.getRecordlabelId());
+        
+        Album savedAlbum = albumRepository.save(existing);
+        return convertToDTO(savedAlbum);
     }
 
     @Override
@@ -63,7 +71,25 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public List<Album> getAlbumsByRecordlabel(Long recordlabelId) {
-        return albumRepository.findByRecordlabelId(recordlabelId);
+    public List<AlbumResponseDTO> getAlbumsByRecordlabel(Long recordlabelId) {
+        return albumRepository.findByRecordlabelId(recordlabelId).stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList()); 
+    }
+
+    private AlbumResponseDTO convertToDTO(Album album) {
+        AlbumResponseDTO response = new AlbumResponseDTO();
+        response.setId(album.getId());
+        response.setTitle(album.getTitle());
+        response.setArtistId(album.getArtistId());
+        response.setRecordlabelId(album.getRecordlabelId());
+
+        if (album.getSongs() != null) {
+            List<SongDTO> songDTOs = album.getSongs().stream()
+                .map(s -> new SongDTO(s.getId(), s.getTitle(), s.getDuration()))
+                .collect(Collectors.toList());
+            response.setSongs(songDTOs);
+        }
+        return response;
     }
 }

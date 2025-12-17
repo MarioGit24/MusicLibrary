@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import se.yrgo.data.EpRepository;
 import se.yrgo.domain.Ep;
-import se.yrgo.domain.Ep;
 import se.yrgo.domain.Song;
 import se.yrgo.dto.EpCreationRequestDTO;
 

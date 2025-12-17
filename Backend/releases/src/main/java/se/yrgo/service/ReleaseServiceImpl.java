@@ -37,7 +37,7 @@ public class ReleaseServiceImpl implements ReleaseService {
             dto.setType("ALBUM"); //
 
             List<SongDTO> songDtos = album.getSongs().stream()
-                    .map(s -> new SongDTO(s.getTitle(), s.getDuration()))
+                    .map(s -> new SongDTO(s.getId(),s.getTitle(), s.getDuration()))
                     .toList();
             dto.setSongs(songDtos);
 
@@ -56,7 +56,7 @@ public class ReleaseServiceImpl implements ReleaseService {
             epDto.setTitle(ep.getTitle()); 
             epDto.setType("EP");
             
-            List<SongDTO> songDtos2 = ep.getSongs().stream().map(s -> new SongDTO(s.getTitle(), s.getDuration())).toList(); 
+            List<SongDTO> songDtos2 = ep.getSongs().stream().map(s -> new SongDTO(s.getId(),s.getTitle(), s.getDuration())).toList(); 
             epDto.setSongs(songDtos2);
 
             releaseList.add(epDto); 

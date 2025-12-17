@@ -28,10 +28,14 @@ public class Album {
     public Album() {
     }
 
+    public Album(String title, Long artistId, Long recordLabelId ){
+        this.title = title;
+        this.artistId = artistId;
+        this.recordlabelId = recordLabelId;
+
+    }
+
     public void addSong(Song song) {
-        if (songs == null) {
-            songs = new ArrayList<>();
-        }
         songs.add(song);
         song.setAlbum(this);
     }
@@ -60,11 +64,11 @@ public class Album {
         this.songs = songs;
     }
 
-    public Long getRecordLabelId() {
+    public Long getRecordlabelId() {
         return recordlabelId;
     }
 
-    public void setRecordLabelId(Long recordlabelId) {
+    public void setRecordlabelId(Long recordlabelId) {
         this.recordlabelId = recordlabelId;
     }
 

@@ -1,6 +1,7 @@
 package se.yrgo.rest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import se.yrgo.domain.Song;
+import se.yrgo.dto.SongDTO;
 import se.yrgo.service.SongService;
 
 @RestController
@@ -22,25 +24,35 @@ public class SongController {
         this.songService = songService;
     }
 
-    @GetMapping
-    public List<Song> getAllSongs(){
-        return songService.getAllSongs();
-    }
-
+   @GetMapping
+    public List<SongDTO> getAllSongs(){
+       return songService.getAllSongs().stream()
+           .map(song -> new SongDTO(song.getId(), song.getTitle(), song.getDuration()))
+           .collect(Collectors.toList());
+}
     @GetMapping("/{id}")
-    public Song getSongById(@PathVariable Long id){
-        return songService.getSongById(id);
+    public SongDTO getSongById(@PathVariable Long id){
+        Song song = songService.getSongById(id);
+        return new SongDTO(song.getId(), song.getTitle(), song.getDuration());
     }
 
     @PutMapping("/{id}") 
-    public Song updateSong(@PathVariable Long id, @RequestBody Song song){
-        return songService.updateSong(id, song);
+    public ResponseEntity<SongDTO> updateSong(@PathVariable Long id, @RequestBody SongDTO dto){
+        Song songDetails = new Song(dto.getTitle(), dto.getDuration());
+        
+        Song updatedSong = songService.updateSong(id, songDetails);
+        
+        SongDTO response = new SongDTO(updatedSong.getId(), updatedSong.getTitle(), updatedSong.getDuration());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<Song> createSong(@RequestBody Song song){
-        Song newSong = songService.createSong(song);
-        return new ResponseEntity<>(newSong, HttpStatus.CREATED);
+    public ResponseEntity<SongDTO> createSong(@RequestBody SongDTO dto){ 
+        Song songEntity = new Song(dto.getTitle(), dto.getDuration());
+        Song newSong = songService.createSong(songEntity);
+        
+        SongDTO response = new SongDTO(newSong.getId(), newSong.getTitle(), newSong.getDuration());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")  

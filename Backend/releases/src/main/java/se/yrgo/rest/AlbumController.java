@@ -22,7 +22,7 @@ public class AlbumController {
     }
 
     @GetMapping
-    public List<Album> getAllAlbums(@RequestParam(required = false) Long recordlabelId) {
+    public List<AlbumResponseDTO> getAllAlbums(@RequestParam(required = false) Long recordlabelId) {
         if (recordlabelId != null) {
             return albumService.getAlbumsByRecordlabel(recordlabelId);
         }
@@ -36,14 +36,15 @@ public class AlbumController {
     // }
 
     @GetMapping("/{id}")
-    public Album getAlbum(@PathVariable Long id) {
+    public AlbumResponseDTO getAlbum(@PathVariable Long id) {
         return albumService.getAlbumById(id);
     }
 
 
     @PutMapping("/{id}")
-    public Album updateAlbum(@PathVariable Long id, @RequestBody Album album) {
-        return albumService.updateAlbum(id, album);
+    public ResponseEntity<AlbumResponseDTO> updateAlbum(@PathVariable Long id, @RequestBody AlbumCreationRequestDTO requestDTO) {
+        AlbumResponseDTO response = albumService.updateAlbum(id, requestDTO);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -53,10 +54,10 @@ public class AlbumController {
     }
 
     @PostMapping
-    public ResponseEntity<Album> createAlbumWithSongs(@RequestBody AlbumCreationRequestDTO requestDTO) {
+    public ResponseEntity<AlbumResponseDTO> createAlbumWithSongs(@RequestBody AlbumCreationRequestDTO requestDTO) {
         // business logic??
-        Album createdAlbum = albumService.createAlbum(requestDTO);
-        return new ResponseEntity<>(createdAlbum, HttpStatus.CREATED);
+        AlbumResponseDTO response = albumService.createAlbum(requestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }
