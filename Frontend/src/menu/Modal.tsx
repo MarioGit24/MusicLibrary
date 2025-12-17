@@ -14,6 +14,25 @@ const style = {
   p: 4,
   display: "flex",
   flexDirection: "column",
+  transform: "translate(-50%, -50%)",
+};
+
+const inputStyle = {
+  background: "#d7d7d718",
+  borderRadius: 2,
+  mb: 1,
+  input: {
+    color: "#aea5afff",
+    "&::placeholder": {
+      color: "#8e7990e4",
+    },
+  },
+  fieldset: { borderColor: "#aea5af23" },
+  "& .MuiOutlinedInput-root": {
+    "&.Mui-focused fieldset": {
+      borderColor: "#aea5af23",
+    },
+  },
 };
 
 interface Props {
@@ -33,6 +52,9 @@ function ModalMenu({ open, setOpen, type }: Props) {
   // Formulär-states
   const [artistFormData, setArtistFormData] = useState({ name: "" });
   const [releaseFormData, setReleaseFormData] = useState({ title: "", duration: "" });
+
+  const [artistFormData, setArtistFormData] = useState({ name: "" });
+  const [releaseFormData, setReleaseFormData] = useState({ title: "", duration: "" });
   const [albumFormData, setAlbumFormData] = useState({
     title: "",
     songs: [{ title: "", duration: "" }, { title: "", duration: "" }, { title: "", duration: "" }],
@@ -43,6 +65,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
   });
 
   // Hämta artister när modalen öppnas
+
   useEffect(() => {
     const fetchArtists = async () => {
       try {
@@ -50,175 +73,167 @@ function ModalMenu({ open, setOpen, type }: Props) {
         if (!response.ok) throw new Error("Kunde inte hämta artistlistan.");
         const data = await response.json();
         setArtists(data);
-      } catch (err) {
-        console.error(err);
-        setError("Kunde inte ansluta till Artist-Service (port 8082).");
+      } catch (error) {
+        console.error("Error fetching artists:", error);
       }
     };
-    if (open) {
-      setError(null);
-      fetchArtists();
-    }
+    if (open) fetchArtists();
   }, [open]);
 
-  const handleClose = () => {
-    setOpen(false);
-    setError(null);
-    setLoading(false);
-  };
+  // --- API FUNCTIONS ---
 
-  // --- API LOGIK ---
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    const t = type.toLowerCase();
-
+  async function createAndEnrollArtist() {
     try {
-      if (t === "artist") {
-        const res = await fetch("http://localhost:8082/artists", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: artistFormData.name }),
+      const response = await fetch("http://localhost:8082/artists", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: artistFormData.name }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        await fetch(`http://localhost:8081/recordlabels/1/enroll-artist/${data.id}`, {
+          method: "PUT",
         });
-        if (!res.ok) throw new Error("Misslyckades att skapa artist.");
-        const newArtist = await res.json();
-        
-        // Enrolla till skivbolag
-        await fetch(`http://localhost:8081/recordlabels/1/enroll-artist/${newArtist.id}`, { method: "PUT" });
-      } 
-      
-      else if (t === "single") {
-        if (!selectedArtistId) throw new Error("Du måste välja en artist för singeln!");
-
-        const singleData = {
-          title: releaseFormData.title,
-          duration: parseInt(releaseFormData.duration) || 0,
-          artistId: parseInt(selectedArtistId),
-          recordlabelId: 1
-        };
-
-        const res = await fetch("http://localhost:8083/singles", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(singleData),
-        });
-
-        if (!res.ok) {
-          const msg = await res.text();
-          throw new Error(msg || "Servern nekade att skapa singeln (8083).");
-        }
-      } 
-      
-      else if (t === "album" || t === "ep") {
-        if (!selectedArtistId) throw new Error("Välj en artist!");
-        const isAlbum = t === "album";
-        const data = isAlbum ? albumFormData : epFormData;
-
-        const body = {
-          title: data.title,
-          artistId: parseInt(selectedArtistId),
-          recordlabelId: 1,
-          songsList: data.songs.map(s => ({ title: s.title, duration: parseInt(s.duration) || 0 }))
-        };
-
-        const endpoint = isAlbum ? "albums" : "eps";
-        const res = await fetch(`http://localhost:8083/${endpoint}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-        if (!res.ok) throw new Error(`Misslyckades att skapa ${t}.`);
+        window.location.reload();
       }
-
-      // Om allt gick bra:
-      handleClose();
-
-    } catch (err: any) {
-      setLoading(false);
-      setError(err.message === "Failed to fetch" 
-        ? "Nätverksfel: Kontrollera att dina Java-tjänster är igång." 
-        : err.message);
+    } catch (error) {
+      console.error("Error:", error);
     }
-  };
+  }
 
-  const currentType = type.toLowerCase();
+  async function createAlbum() {
+    const data = {
+      title: albumFormData.title,
+      artistId: albumFormData.artistId,
+      recordlabelId: 1,
+      songsList: albumFormData.songs.map((s) => ({
+        title: s.title,
+        duration: parseInt(s.duration) || 0,
+      })),
+    };
+    const res = await fetch("http://localhost:8083/albums", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) window.location.reload();
+  }
+
+  async function createEp() {
+    const data = {
+      title: epFormData.title,
+      artistId: albumFormData.artistId, // Återanvänder artistId från samma selector
+      recordlabelId: 1,
+      songsList: epFormData.songs.map((s) => ({
+        title: s.title,
+        duration: parseInt(s.duration) || 0,
+      })),
+    };
+    const res = await fetch("http://localhost:8083/eps", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) window.location.reload();
+  }
+
+  async function createSingle() {
+    const data = {
+      title: releaseFormData.title,
+      duration: parseInt(releaseFormData.duration) || 0,
+      artistId: albumFormData.artistId, 
+      recordlabelId: 1,
+    };
+    const res = await fetch("http://localhost:8083/singles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) window.location.reload();
+  }
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (type === "artist") await createAndEnrollArtist();
+    else if (type === "single") await createSingle();
+    else if (type === "album") await createAlbum();
+    else if (type.toLowerCase() === "ep") await createEp();
+    handleClose();
+  };
 
   return (
     <Modal open={open} onClose={handleClose} closeAfterTransition slots={{ backdrop: Backdrop }}>
       <Fade in={open}>
         <Box sx={style}>
-          <Typography variant="h5" sx={{ color: "#9e79a1ff", mb: 2, fontWeight: "bold" }}>
+          <Typography variant="h6" sx={{ color: "#9e79a1ff", mb: 2 }}>
             Create {type.toUpperCase()}
           </Typography>
-
-          {/* ALERT-BOX FÖR FELMEDDELANDEN */}
-          {error && (
-            <Alert severity="error" sx={{ mb: 3, bgcolor: "#310909", color: "#ff8a8a", border: "1px solid #631c1c" }}>
-              {error}
-            </Alert>
-          )}
-
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             
-            {currentType === "artist" && (
-              <TextField 
-                label="Artist Name" 
-                fullWidth 
-                required
-                value={artistFormData.name} 
-                onChange={(e) => setArtistFormData({name: e.target.value})}
-                sx={inputStyle}
-              />
+            {type === "artist" && (
+              <TextField placeholder="Artist Name" value={artistFormData.name} onChange={(e) => setArtistFormData({ name: e.target.value })} fullWidth sx={inputStyle} />
             )}
 
-            {currentType === "single" && (
+            {type === "single" && (
               <>
-                <TextField label="Song Title" fullWidth required value={releaseFormData.title} onChange={(e) => setReleaseFormData({...releaseFormData, title: e.target.value})} sx={inputStyle} />
-                <TextField label="Duration (seconds)" type="number" fullWidth required value={releaseFormData.duration} onChange={(e) => setReleaseFormData({...releaseFormData, duration: e.target.value})} sx={inputStyle} />
+                <TextField placeholder="Single Title" value={releaseFormData.title} onChange={(e) => setReleaseFormData({ ...releaseFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                <TextField placeholder="Duration (seconds)" value={releaseFormData.duration} onChange={(e) => setReleaseFormData({ ...releaseFormData, duration: e.target.value })} fullWidth sx={inputStyle} />
               </>
             )}
 
-            {(currentType === "album" || currentType === "ep") && (
-              <Box>
-                <TextField label="Release Title" fullWidth required value={currentType === "album" ? albumFormData.title : epFormData.title} onChange={(e) => currentType === "album" ? setAlbumFormData({...albumFormData, title: e.target.value}) : setEpFormData({...epFormData, title: e.target.value})} sx={inputStyle} />
-                <Typography sx={{ color: "#8e7990e4", mt: 2, mb: 1 }}>Tracklist:</Typography>
-                {(currentType === "album" ? albumFormData.songs : epFormData.songs).map((song, index) => (
-                  <Box key={index} sx={{ display: "flex", gap: 1, mb: 1 }}>
-                    <TextField label={`Song ${index + 1}`} fullWidth size="small" value={song.title} onChange={(e) => {
-                      const newSongs = currentType === "album" ? [...albumFormData.songs] : [...epFormData.songs];
-                      newSongs[index].title = e.target.value;
-                      currentType === "album" ? setAlbumFormData({...albumFormData, songs: newSongs}) : setEpFormData({...epFormData, songs: newSongs});
-                    }} sx={inputStyle} />
-                    <TextField label="Sec" type="number" size="small" sx={{...inputStyle, width: "120px"}} value={song.duration} onChange={(e) => {
-                      const newSongs = currentType === "album" ? [...albumFormData.songs] : [...epFormData.songs];
-                      newSongs[index].duration = e.target.value;
-                      currentType === "album" ? setAlbumFormData({...albumFormData, songs: newSongs}) : setEpFormData({...epFormData, songs: newSongs});
-                    }} />
+            {type.toLowerCase() === "ep" && (
+              <>
+                <TextField placeholder="EP Title" value={epFormData.title} onChange={(e) => setEpFormData({ ...epFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                {epFormData.songs.map((song, i) => (
+                  <Box key={i} sx={{ display: "flex", gap: 1 }}>
+                    <TextField placeholder={`Song ${i + 1} Title`} value={song.title} onChange={(e) => {
+                      const newSongs = [...epFormData.songs];
+                      newSongs[i].title = e.target.value;
+                      setEpFormData({ ...epFormData, songs: newSongs });
+                    }} fullWidth sx={inputStyle} />
+                    <TextField placeholder="Sec" value={song.duration} onChange={(e) => {
+                      const newSongs = [...epFormData.songs];
+                      newSongs[i].duration = e.target.value;
+                      setEpFormData({ ...epFormData, songs: newSongs });
+                    }} sx={{ ...inputStyle, width: "100px" }} />
                   </Box>
                 ))}
-              </Box>
+              </>
             )}
 
-            {currentType !== "artist" && (
-              <FormControl variant="filled" fullWidth sx={selectStyle} required>
-                <InputLabel sx={{ color: "#8e7990e4" }}>Select Artist</InputLabel>
-                <Select value={selectedArtistId} onChange={(e) => setSelectedArtistId(e.target.value as string)}>
-                  {artists.map((a) => <MenuItem key={a.id} value={a.id.toString()}>{a.name}</MenuItem>)}
-                </Select>
-              </FormControl>
+            {type === "album" && (
+              <>
+                <TextField placeholder="Album Title" value={albumFormData.title} onChange={(e) => setAlbumFormData({ ...albumFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                {albumFormData.songs.map((song, i) => (
+                  <Box key={i} sx={{ display: "flex", gap: 1 }}>
+                    <TextField placeholder={`Song ${i + 1} Title`} value={song.title} onChange={(e) => {
+                      const newSongs = [...albumFormData.songs];
+                      newSongs[i].title = e.target.value;
+                      setAlbumFormData({ ...albumFormData, songs: newSongs });
+                    }} fullWidth sx={inputStyle} />
+                    <TextField placeholder="Sec" value={song.duration} onChange={(e) => {
+                      const newSongs = [...albumFormData.songs];
+                      newSongs[i].duration = e.target.value;
+                      setAlbumFormData({ ...albumFormData, songs: newSongs });
+                    }} sx={{ ...inputStyle, width: "100px" }} />
+                  </Box>
+                ))}
+              </>
             )}
 
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-              <Button 
-                type="submit" 
-                disabled={loading}
-                variant="contained"
-                sx={{ bgcolor: "#8F6D92", "&:hover": { bgcolor: "#7a5c7d" }, px: 5, py: 1 }}
-              >
-                {loading ? <CircularProgress size={24} color="inherit" /> : `Create ${type}`}
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+              {type !== "artist" && (
+                <FormControl variant="filled" size="small" sx={{ width: 200, background: "#d7d7d718", borderRadius: 2 }}>
+                  <InputLabel sx={{ color: "#8e7990e4" }}>Select Artist</InputLabel>
+                  <Select value={albumFormData.artistId} onChange={(e) => setAlbumFormData({ ...albumFormData, artistId: e.target.value as string })} sx={{ color: "#aea5afff" }}>
+                    {artists.map((a) => (
+                      <MenuItem key={a.id} value={a.id}>{a.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+              <Button type="submit" variant="contained" sx={{ bgcolor: "#8F6D92", "&:hover": { bgcolor: "#7a5c7d" } }}>
+                Create
               </Button>
             </Box>
           </Box>
