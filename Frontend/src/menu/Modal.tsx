@@ -56,6 +56,15 @@ function ModalMenu({ open, setOpen, type }: Props) {
     ],
   });
 
+  const [epFormData, setEpFormData] = useState({
+    title: "",
+    artistId: "",
+    songs: [
+      { title: "", duration: "" },
+      { title: "", duration: "" },
+    ],
+  });
+
   const handleChangeArtist = (e: any) => {
     const { name, value } = e.target;
     setArtistFormData((prevState) => ({
@@ -79,11 +88,27 @@ function ModalMenu({ open, setOpen, type }: Props) {
       [name]: value,
     }));
   };
+  const handleEpChange = (e: any) => {
+    const { name, value } = e.target;
+    setEpFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-  const handleSongChange = (index: number, field: string, value: string) => {
+  const handleAlbumSongChange = (index: number, field: string, value: string) => {
     const updatedSongs = [...albumFormData.songs];
     updatedSongs[index] = { ...updatedSongs[index], [field]: value };
     setAlbumFormData((prevState) => ({
+      ...prevState,
+      songs: updatedSongs,
+    }));
+  };
+
+  const handleEpSongChange = (index: number, field: string, value: string) => {
+    const updatedSongs = [...epFormData.songs];
+    updatedSongs[index] = { ...updatedSongs[index], [field]: value };
+    setEpFormData((prevState) => ({
       ...prevState,
       songs: updatedSongs,
     }));
@@ -150,7 +175,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
         title: song.title,
         duration: parseInt(song.duration) || 0,
       })),
-    };
+    };   
 
     try {
       const response = await fetch("http://localhost:8083/albums", {
@@ -167,6 +192,32 @@ function ModalMenu({ open, setOpen, type }: Props) {
     }
   }
 
+  async function createEp() {
+    const epData = {
+      title: epFormData.title,
+      artistId: epFormData.artistId,
+      recordlabelId: 1, // hardcoded label
+      songsList: epFormData.songs.map((song) => ({
+        title: song.title,
+        duration: parseInt(song.duration) || 0,
+      })),
+    };
+        try {
+      const response = await fetch("http://localhost:8083/eps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(epData),
+      });
+
+      if (response.ok) {
+        console.log("EP created successfully");
+      }
+    } catch (error) {
+      console.error("Error creating EP:", error);
+    }
+
+  }
+
   async function createSingle() {
     console.log("Single");
   }
@@ -180,6 +231,8 @@ function ModalMenu({ open, setOpen, type }: Props) {
       createSingle();
     } else if (type === "album") {
       createAlbum();
+    } else if (type == "EP") {
+      createEp(); 
     }
     handleClose();
   };
@@ -298,30 +351,169 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   />
                 </>
               ) : type === "ep" ? (
-                <TextField
-                  placeholder="Add an EO title..."
-                  name="epTitle"
-                  value={artistFormData.name}
-                  onChange={handleChangeArtist}
-                  fullWidth
-                  sx={{
-                    mt: 2,
-                    background: "#d7d7d718",
-                    borderRadius: 2,
-                    input: {
-                      color: "#aea5afff",
-                      "&::placeholder": {
-                        color: "#8e7990e4",
+                <>
+                  {/* ALBUM SECTION START */}
+                  <TextField
+                    placeholder="Add an album title..."
+                    name="title"
+                    value={albumFormData.title}
+                    onChange={handleAlbumChange}
+                    fullWidth
+                    sx={{
+                      mt: 2,
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": {
+                          color: "#8e7990e4",
+                        },
                       },
-                    },
-                    fieldset: { borderColor: "#aea5af23" },
-                    "& .MuiOutlinedInput-root": {
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#aea5af23",
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#aea5af23",
+                        },
                       },
-                    },
-                  }}
-                />
+                    }}
+                  />
+
+                  {/* SONG 1 */}
+                  <p>Song 1:</p>
+                  <TextField
+                    placeholder="Add a song title..."
+                    value={albumFormData.songs[0].title}
+                    onChange={(e) =>
+                      handleAlbumSongChange(0, "title", e.target.value)
+                    }
+                    fullWidth
+                    sx={{
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": { color: "#8e7990e4" },
+                      },
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
+                      },
+                    }}
+                  />
+                  <TextField
+                    placeholder="Add a song duration..."
+                    value={albumFormData.songs[0].duration}
+                    onChange={(e) =>
+                      handleAlbumSongChange(0, "duration", e.target.value)
+                    }
+                    fullWidth
+                    sx={{
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": { color: "#8e7990e4" },
+                      },
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
+                      },
+                    }}
+                  />
+
+                  {/* SONG 2 */}
+                  <p>Song 2:</p>
+                  <TextField
+                    placeholder="Add a song title..."
+                    value={albumFormData.songs[1].title}
+                    onChange={(e) =>
+                      handleAlbumSongChange(1, "title", e.target.value)
+                    }
+                    fullWidth
+                    sx={{
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": { color: "#8e7990e4" },
+                      },
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
+                      },
+                    }}
+                  />
+                  <TextField
+                    placeholder="Add a song duration..."
+                    value={albumFormData.songs[1].duration}
+                    onChange={(e) =>
+                      handleAlbumSongChange(1, "duration", e.target.value)
+                    }
+                    fullWidth
+                    sx={{
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": { color: "#8e7990e4" },
+                      },
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
+                      },
+                    }}
+                  />
+
+                  {/* SONG 3 */}
+                  <p>Song 3:</p>
+                  <TextField
+                    placeholder="Add a song title..."
+                    value={albumFormData.songs[2].title}
+                    onChange={(e) =>
+                      handleAlbumSongChange(2, "title", e.target.value)
+                    }
+                    fullWidth
+                    sx={{
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": { color: "#8e7990e4" },
+                      },
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
+                      },
+                    }}
+                  />
+                  <TextField
+                    placeholder="Add a song duration..."
+                    value={albumFormData.songs[2].duration}
+                    onChange={(e) =>
+                      handleAlbumSongChange(2, "duration", e.target.value)
+                    }
+                    fullWidth
+                    sx={{
+                      background: "#d7d7d718",
+                      borderRadius: 2,
+                      input: {
+                        color: "#aea5afff",
+                        padding: 1.5,
+                        "&::placeholder": { color: "#8e7990e4" },
+                      },
+                      fieldset: { borderColor: "#aea5af23" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
+                      },
+                    }}
+                  />
+                </>
               ) : (
                 <>
                   {/* ALBUM SECTION START */}
@@ -357,7 +549,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song title..."
                     value={albumFormData.songs[0].title}
                     onChange={(e) =>
-                      handleSongChange(0, "title", e.target.value)
+                      handleAlbumSongChange(0, "title", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -378,7 +570,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song duration..."
                     value={albumFormData.songs[0].duration}
                     onChange={(e) =>
-                      handleSongChange(0, "duration", e.target.value)
+                      handleAlbumSongChange(0, "duration", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -402,7 +594,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song title..."
                     value={albumFormData.songs[1].title}
                     onChange={(e) =>
-                      handleSongChange(1, "title", e.target.value)
+                      handleAlbumSongChange(1, "title", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -423,7 +615,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song duration..."
                     value={albumFormData.songs[1].duration}
                     onChange={(e) =>
-                      handleSongChange(1, "duration", e.target.value)
+                      handleAlbumSongChange(1, "duration", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -447,7 +639,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song title..."
                     value={albumFormData.songs[2].title}
                     onChange={(e) =>
-                      handleSongChange(2, "title", e.target.value)
+                      handleAlbumSongChange(2, "title", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -468,7 +660,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song duration..."
                     value={albumFormData.songs[2].duration}
                     onChange={(e) =>
-                      handleSongChange(2, "duration", e.target.value)
+                      handleAlbumSongChange(2, "duration", e.target.value)
                     }
                     fullWidth
                     sx={{
