@@ -33,7 +33,7 @@ function PopoverMenu() {
   const menuData = [
     { name: "artist", icon: "" },
     { name: "album", icon: "" },
-    { name: "EP", icon: "" },
+    { name: "ep", icon: "" },
     { name: "single", icon: "" },
   ];
 
@@ -133,7 +133,7 @@ function PopoverMenu() {
                     height: 20,
                   }}
                 />
-              ) : item.name === "EP" ? (
+              ) : item.name === "ep" ? (
                 <AlbumOutlinedIcon
                   sx={{
                     opacity: 0.8,
