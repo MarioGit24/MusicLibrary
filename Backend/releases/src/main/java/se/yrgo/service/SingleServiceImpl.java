@@ -32,16 +32,19 @@ public class SingleServiceImpl implements SingleService {
         return convertToDTO(single);
     }
 
-    @Override
-    public SingleResponseDTO createSingle(SingleRequestDTO dto) {
-        Single single = new Single();
-        single.setTitle(dto.getTitle());
-        single.setDuration(dto.getDuration());
-        single.setRecordlabelId(dto.getRecordlabelId());
+        @Override
+        public SingleResponseDTO createSingle(SingleRequestDTO dto) {
+            Single single = new Single();
+            single.setTitle(dto.getTitle());
+            single.setDuration(dto.getDuration());
+            single.setRecordlabelId(dto.getRecordlabelId());
+            single.setArtistId(dto.getArtistId());
 
-        Single saved = singleRepository.save(single);
-        return convertToDTO(saved);
-    }
+
+
+            Single saved = singleRepository.save(single);
+            return convertToDTO(saved);
+        }
 
     @Override
     public SingleResponseDTO updateSingle(Long id, SingleRequestDTO dto) {
@@ -63,8 +66,10 @@ public class SingleServiceImpl implements SingleService {
 
     private SingleResponseDTO convertToDTO(Single single) {
         SingleResponseDTO response = new SingleResponseDTO();
+        response.setId(single.getId());
         response.setTitle(single.getTitle());
         response.setDuration(single.getDuration());
+        response.setArtistId(single.getArtistId());
         response.setRecordlabelId(single.getRecordlabelId());
         return response;
     }

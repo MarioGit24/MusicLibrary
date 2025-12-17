@@ -12,14 +12,16 @@ public class Single {
     private String title;
     private int duration;
     private Long recordlabelId;
+    private Long artistId;
 
 
     public Single() {}
 
-    public Single(String title, int duration, Long recordlabelId){
+    public Single(String title, int duration, Long recordlabelId, Long artistId){
         this.title = title;
         this.duration = duration;
         this.recordlabelId = recordlabelId;
+        this.artistId = artistId;
 
     }
 
@@ -71,5 +73,13 @@ public class Single {
     @Override
     public String toString() {
         return "Single{id=" + id + ", title='" + title + "'}";
+    }
+
+    public Long getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
     }
 }
