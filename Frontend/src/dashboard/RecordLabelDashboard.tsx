@@ -38,8 +38,8 @@ const RecordLabelDashboard = () => {
         <>
           <h2 style={{ marginTop: 30, marginBottom: 10 }}>Releases</h2>
           <ul>
-            {labelData.releases.map((release) => (
-              <AlbumItem release={release} />
+            {labelData.releases.map((release, i) => (
+              <div key={i}>  <AlbumItem release={release} /></div>
             ))}
           </ul>
         </>

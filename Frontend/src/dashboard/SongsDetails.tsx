@@ -67,7 +67,7 @@ function SongsDetails({ open, setOpen, songs, albumTitle }: Props) {
                 marginBottom: 15,
               }}
             >
-              {songs.map((song, i) => (
+              {songs && songs.map((song, i) => (
                 <div key={i}>
                   <h4 style={{ color: "#b49bb5e4", marginBottom: 3 }}>
                     Song {i + 1}

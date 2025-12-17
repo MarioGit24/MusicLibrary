@@ -352,12 +352,12 @@ function ModalMenu({ open, setOpen, type }: Props) {
                 </>
               ) : type === "ep" ? (
                 <>
-                  {/* ALBUM SECTION START */}
+                  {/* EP SECTION START */}
                   <TextField
-                    placeholder="Add an album title..."
+                    placeholder="Add an EP title..."
                     name="title"
-                    value={albumFormData.title}
-                    onChange={handleAlbumChange}
+                    value={epFormData.title}
+                    onChange={handleEpChange}
                     fullWidth
                     sx={{
                       mt: 2,
@@ -383,9 +383,9 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   <p>Song 1:</p>
                   <TextField
                     placeholder="Add a song title..."
-                    value={albumFormData.songs[0].title}
+                    value={epFormData.songs[0].title}
                     onChange={(e) =>
-                      handleAlbumSongChange(0, "title", e.target.value)
+                      handleEpSongChange(0, "title", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -404,9 +404,9 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   />
                   <TextField
                     placeholder="Add a song duration..."
-                    value={albumFormData.songs[0].duration}
+                    value={epFormData.songs[0].duration}
                     onChange={(e) =>
-                      handleAlbumSongChange(0, "duration", e.target.value)
+                      handleEpSongChange(0, "duration", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -428,9 +428,9 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   <p>Song 2:</p>
                   <TextField
                     placeholder="Add a song title..."
-                    value={albumFormData.songs[1].title}
+                    value={epFormData.songs[1].title}
                     onChange={(e) =>
-                      handleAlbumSongChange(1, "title", e.target.value)
+                      handleEpSongChange(1, "title", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -451,52 +451,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     placeholder="Add a song duration..."
                     value={albumFormData.songs[1].duration}
                     onChange={(e) =>
-                      handleAlbumSongChange(1, "duration", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-
-                  {/* SONG 3 */}
-                  <p>Song 3:</p>
-                  <TextField
-                    placeholder="Add a song title..."
-                    value={albumFormData.songs[2].title}
-                    onChange={(e) =>
-                      handleAlbumSongChange(2, "title", e.target.value)
-                    }
-                    fullWidth
-                    sx={{
-                      background: "#d7d7d718",
-                      borderRadius: 2,
-                      input: {
-                        color: "#aea5afff",
-                        padding: 1.5,
-                        "&::placeholder": { color: "#8e7990e4" },
-                      },
-                      fieldset: { borderColor: "#aea5af23" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": { borderColor: "#aea5af23" },
-                      },
-                    }}
-                  />
-                  <TextField
-                    placeholder="Add a song duration..."
-                    value={albumFormData.songs[2].duration}
-                    onChange={(e) =>
-                      handleAlbumSongChange(2, "duration", e.target.value)
+                      handleEpSongChange(1, "duration", e.target.value)
                     }
                     fullWidth
                     sx={{
@@ -686,7 +641,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   justifyContent: "space-between",
                 }}
               >
-                {type === "album" && (
+                {type === "album" || type === "EP" && (
                   <FormControl
                     variant="filled"
                     size="small"
