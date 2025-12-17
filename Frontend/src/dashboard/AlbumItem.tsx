@@ -5,20 +5,20 @@ import SongsDetails from "./SongsDetails";
 
 interface AlbumItemProps {
   release: ReleasesData;
+  filterType: string;
 }
 
-const AlbumItem = ({ release }: AlbumItemProps) => {
+const AlbumItem = ({ release, filterType }: AlbumItemProps) => {
   const { id, title, type, songs } = release;
-  const [modalOpen, setModalOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  if (filterType && filterType.toLowerCase() !== type.toLowerCase()) {
+    return null;
+  }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = () => {
-    setAnchorEl(null);
     setModalOpen(true);
   };
 
@@ -70,6 +70,7 @@ const AlbumItem = ({ release }: AlbumItemProps) => {
         setOpen={setModalOpen}
         songs={songs}
         albumTitle={title}
+        type={type}
       />
     </>
   );

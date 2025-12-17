@@ -5,6 +5,7 @@ import TypeFilter from "./TypeFilter";
 
 const RecordLabelDashboard = () => {
   const [labelData, setLabelData] = useState<RecordlabelData>();
+  const [type, setType] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,13 +47,13 @@ const RecordLabelDashboard = () => {
             }}
           >
             <h2>Releases</h2>
-            <TypeFilter />
+            <TypeFilter setType={setType} />
           </div>
-          <ul>
+          <div style={{ display: "flex", gap: 12 }}>
             {labelData.releases.map((release) => (
-              <AlbumItem release={release} />
+              <AlbumItem release={release} filterType={type} />
             ))}
-          </ul>
+          </div>
         </>
       )}
     </div>

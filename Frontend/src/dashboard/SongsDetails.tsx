@@ -10,6 +10,7 @@ interface Props {
   setOpen: React.Dispatch<React.SetStateAction<any>>;
   songs: SongData[];
   albumTitle: string;
+  type: string;
 }
 
 const style = {
@@ -27,7 +28,7 @@ const style = {
   flexDirection: "column",
 };
 
-function SongsDetails({ open, setOpen, songs, albumTitle }: Props) {
+function SongsDetails({ open, setOpen, songs, albumTitle, type }: Props) {
   const handleClose = () => setOpen(false);
 
   return (
@@ -51,18 +52,25 @@ function SongsDetails({ open, setOpen, songs, albumTitle }: Props) {
               id="transition-modal-title"
               variant="h6"
               component="h2"
+              style={{ color: "#9e79a1ff", fontWeight: "bolder" }}
+            >
+              {type}
+            </Typography>
+            <Typography
+              id="transition-modal-title"
+              variant="h6"
+              component="h2"
               style={{ color: "#9e79a1ff" }}
             >
               {albumTitle}
             </Typography>
             <div
               style={{
-                gap: 2,
                 flex: 1,
                 overflowY: "auto",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between",
+                gap: 20,
                 marginTop: 20,
                 marginBottom: 15,
               }}

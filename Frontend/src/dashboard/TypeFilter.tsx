@@ -5,7 +5,11 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import { RecordlabelData } from "../types/ApiTypes";
 
-const TypeFilter = () => {
+interface Props {
+  setType: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const TypeFilter = ({ setType }: Props) => {
   const [labelData, setLabelData] = useState<RecordlabelData>();
   const menuData = ["Artist", "Album", "EP", "Single"];
 
@@ -30,6 +34,9 @@ const TypeFilter = () => {
       <Autocomplete
         disablePortal
         options={menuData}
+        onChange={(event: any, newValue: string | null) => {
+          setType(newValue || "");
+        }}
         sx={{
           width: 250,
           height: 0,

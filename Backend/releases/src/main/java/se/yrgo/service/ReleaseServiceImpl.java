@@ -1,7 +1,9 @@
 package se.yrgo.service;
 
 import java.util.*;
+
 import org.springframework.stereotype.*;
+
 import se.yrgo.data.*;
 import se.yrgo.domain.*;
 import se.yrgo.dto.*;
@@ -11,11 +13,11 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     private final AlbumRepository albumRepository;
     private final EpRepository epRepository;
-    private final SingleRepository singleRepository; 
+    private final SingleRepository singleRepository;
 
-    public ReleaseServiceImpl(AlbumRepository albumRepository, 
-                              EpRepository epRepository, 
-                              SingleRepository singleRepository) {
+    public ReleaseServiceImpl(AlbumRepository albumRepository,
+            EpRepository epRepository,
+            SingleRepository singleRepository) {
         this.albumRepository = albumRepository;
         this.epRepository = epRepository;
         this.singleRepository = singleRepository;
@@ -42,17 +44,17 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         List<Ep> eps = epRepository.findByRecordlabelId(recordlabelId);
         for (Ep ep : eps) {
-            ReleaseDTO epDto = new ReleaseDTO(); 
+            ReleaseDTO epDto = new ReleaseDTO();
             epDto.setId(ep.getId());
-            epDto.setTitle(ep.getTitle()); 
+            epDto.setTitle(ep.getTitle());
             epDto.setType("EP");
-            
+
             List<SongDTO> songDtos = ep.getSongs().stream()
                     .map(s -> new SongDTO(s.getId(), s.getTitle(), s.getDuration()))
-                    .toList(); 
+                    .toList();
             epDto.setSongs(songDtos);
 
-            releaseList.add(epDto); 
+            releaseList.add(epDto);
         }
 
         List<Single> singles = singleRepository.findByRecordlabelId(recordlabelId);
@@ -63,8 +65,7 @@ public class ReleaseServiceImpl implements ReleaseService {
             singleDto.setType("SINGLE");
 
             List<SongDTO> singleSongList = List.of(
-                new SongDTO(s.getId(), s.getTitle(), s.getDuration())
-            );
+                    new SongDTO(s.getId(), s.getTitle(), s.getDuration()));
             singleDto.setSongs(singleSongList);
 
             releaseList.add(singleDto);
