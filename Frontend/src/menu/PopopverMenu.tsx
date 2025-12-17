@@ -30,7 +30,6 @@ function PopoverMenu() {
     { name: "artist", icon: "" },
     { name: "album", icon: "" },
     { name: "EP", icon: "" },
-    { name: "song", icon: "" },
     { name: "single", icon: "" },
   ];
 

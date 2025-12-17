@@ -1,5 +1,6 @@
 import Header from "./Header";
 import PopoverMenu from "./menu/PopopverMenu";
+import RecordLabelDashboard from "./RecordLabelDashboard";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Header />
       <PopoverMenu />
       {/* TODO: take back <Artists /> */}
+      <RecordLabelDashboard />
     </div>
   );
 }

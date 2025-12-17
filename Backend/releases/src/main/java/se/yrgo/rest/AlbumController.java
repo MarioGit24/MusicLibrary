@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 import se.yrgo.service.*;
 
 @RestController
 @RequestMapping("/albums")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AlbumController {
 
     private final AlbumService albumService;
@@ -40,9 +40,9 @@ public class AlbumController {
         return albumService.getAlbumById(id);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<AlbumResponseDTO> updateAlbum(@PathVariable Long id, @RequestBody AlbumCreationRequestDTO requestDTO) {
+    public ResponseEntity<AlbumResponseDTO> updateAlbum(@PathVariable Long id,
+            @RequestBody AlbumCreationRequestDTO requestDTO) {
         AlbumResponseDTO response = albumService.updateAlbum(id, requestDTO);
         return ResponseEntity.ok(response);
     }

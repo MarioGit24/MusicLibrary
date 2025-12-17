@@ -15,7 +15,7 @@ function Header() {
       }}
     >
       <h2 style={{ fontWeight: 500, letterSpacing: -1, color: "#8F6D92" }}>
-        Spotify
+        Releasify
       </h2>
 
       <Autocomplete
