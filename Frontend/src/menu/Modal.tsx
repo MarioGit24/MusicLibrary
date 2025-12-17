@@ -299,7 +299,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                 </>
               ) : type === "ep" ? (
                 <TextField
-                  placeholder="Add an EO title..."
+                  placeholder="Add an EP title..."
                   name="epTitle"
                   value={artistFormData.name}
                   onChange={handleChangeArtist}
@@ -531,11 +531,12 @@ function ModalMenu({ open, setOpen, type }: Props) {
                       value={albumFormData.artistId}
                       onChange={handleAlbumChange}
                     >
-                      {artists.map((artist) => (
-                        <MenuItem key={artist.id} value={artist.id}>
-                          {artist.name}
-                        </MenuItem>
-                      ))}
+                      {artists &&
+                        artists.map((artist) => (
+                          <MenuItem key={artist.id} value={artist.id}>
+                            {artist.name}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
                 )}
