@@ -1,9 +1,7 @@
 package se.yrgo.service;
 
 import java.util.*;
-
 import org.springframework.stereotype.*;
-
 import se.yrgo.data.*;
 import se.yrgo.domain.*;
 import se.yrgo.dto.*;
@@ -12,54 +10,64 @@ import se.yrgo.dto.*;
 public class ReleaseServiceImpl implements ReleaseService {
 
     private final AlbumRepository albumRepository;
+    private final EpRepository epRepository;
+    private final SingleRepository singleRepository; 
 
-    private final EpRepository epRepository; 
-    // private final EpRepository epRepository; // You will add this later!
-
-    public ReleaseServiceImpl(AlbumRepository albumRepository, EpRepository epRepository) {
+    public ReleaseServiceImpl(AlbumRepository albumRepository, 
+                              EpRepository epRepository, 
+                              SingleRepository singleRepository) {
         this.albumRepository = albumRepository;
-        this.epRepository = epRepository; 
-
+        this.epRepository = epRepository;
+        this.singleRepository = singleRepository;
     }
 
     @Override
     public List<ReleaseDTO> findAllByRecordlabelId(Long recordlabelId) {
-        // 1. Get all Albums for this label
-        List<Album> albums = albumRepository.findByRecordlabelId(recordlabelId);
-
-        // 2. Convert Albums to ReleaseDTOs
         List<ReleaseDTO> releaseList = new ArrayList<>();
 
+        List<Album> albums = albumRepository.findByRecordlabelId(recordlabelId);
         for (Album album : albums) {
             ReleaseDTO dto = new ReleaseDTO();
             dto.setId(album.getId());
             dto.setTitle(album.getTitle());
-            dto.setType("ALBUM"); //
+            dto.setType("ALBUM");
 
             List<SongDTO> songDtos = album.getSongs().stream()
-                    .map(s -> new SongDTO(s.getId(),s.getTitle(), s.getDuration()))
+                    .map(s -> new SongDTO(s.getId(), s.getTitle(), s.getDuration()))
                     .toList();
             dto.setSongs(songDtos);
 
             releaseList.add(dto);
         }
 
-        // 3. (FUTURE) Get all EPs, convert them, and add to releaseList
-        // List<Ep> eps = epRepository.findByLabelId(recordlabelId);
-        // ... convert and add to releaseList ...
-
-        List<Ep> eps = epRepository.findByRecordlabelId(recordlabelId); 
-
+        List<Ep> eps = epRepository.findByRecordlabelId(recordlabelId);
         for (Ep ep : eps) {
             ReleaseDTO epDto = new ReleaseDTO(); 
             epDto.setId(ep.getId());
             epDto.setTitle(ep.getTitle()); 
             epDto.setType("EP");
             
-            List<SongDTO> songDtos2 = ep.getSongs().stream().map(s -> new SongDTO(s.getId(),s.getTitle(), s.getDuration())).toList(); 
-            epDto.setSongs(songDtos2);
+            List<SongDTO> songDtos = ep.getSongs().stream()
+                    .map(s -> new SongDTO(s.getId(), s.getTitle(), s.getDuration()))
+                    .toList(); 
+            epDto.setSongs(songDtos);
 
             releaseList.add(epDto); 
+        }
+
+        List<Single> singles = singleRepository.findByRecordlabelId(recordlabelId);
+        for (Single s : singles) {
+            ReleaseDTO singleDto = new ReleaseDTO();
+            singleDto.setId(s.getId());
+            singleDto.setTitle(s.getTitle());
+            singleDto.setType("SINGLE");
+
+            List<SongDTO> singleSongList = List.of(
+                new SongDTO(s.getId(), s.getTitle(), s.getDuration())
+            );
+            singleDto.setSongs(singleSongList);
+
+            releaseList.add(singleDto);
         }
 
         return releaseList;
