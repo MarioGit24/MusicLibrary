@@ -6,10 +6,10 @@ public class EpCreationRequestDTO{
     private String title;
     private Long artistId;
     private Long recordlabelId;
-    private List<SongDTO> songsList;
+    private List<SongDTO> songs;
 
-    public List<SongDTO> getSongsList() {
-        return songsList;
+    public List<SongDTO> getSongs() {
+        return songs;
     }
 
     public String getTitle() {
@@ -36,8 +36,8 @@ public class EpCreationRequestDTO{
         this.recordlabelId = recordlabelId;
     }
 
-    public void setSongsList(List<SongDTO> songsList) {
-        this.songsList = songsList;
+    public void setSongs(List<SongDTO> songsList) {
+        this.songs = songsList;
     }
 
 }

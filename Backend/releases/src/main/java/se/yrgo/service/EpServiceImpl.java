@@ -30,9 +30,9 @@ public class EpServiceImpl implements EpService {
         ep.setTitle(dto.getTitle());
         ep.setArtistId(dto.getArtistId());
         ep.setRecordlabelId(dto.getRecordlabelId());
-
-        if (dto.getSongsList() != null) {
-            dto.getSongsList().forEach(songDto -> {
+   
+        if (dto.getSongs() != null) {
+            dto.getSongs().forEach(songDto -> {
                 Song song = new Song();
                 song.setTitle(songDto.getTitle());
                 song.setDuration(songDto.getDuration());
