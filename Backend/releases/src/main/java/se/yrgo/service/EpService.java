@@ -4,18 +4,19 @@ import java.util.*;
 
 import se.yrgo.domain.*;
 import se.yrgo.dto.EpCreationRequestDTO;
+import se.yrgo.dto.EpResponseDTO;
 
 public interface EpService {
-    public List<Ep> getAllEps();
+    public List<EpResponseDTO> getAllEps();
 
-    public Ep createEp(EpCreationRequestDTO ep);
+    public EpResponseDTO createEp(EpCreationRequestDTO ep);
 
-    Ep getEpById(Long id);
+    EpResponseDTO getEpById(Long id);
 
-    Ep updateEp(Long id, Ep ep);
+    EpResponseDTO updateEp(Long id, EpCreationRequestDTO ep);
 
     void deleteEp(Long id);
 
-    List<Ep> getEpsByRecordlabel(Long recordlabelId);
+    List<EpResponseDTO> getEpsByRecordlabel(Long recordlabelId);
 
 }

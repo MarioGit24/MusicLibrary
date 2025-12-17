@@ -1,13 +1,16 @@
 package se.yrgo.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import se.yrgo.data.EpRepository;
 import se.yrgo.domain.Ep;
 import se.yrgo.domain.Song;
+import se.yrgo.dto.EpResponseDTO;
 import se.yrgo.dto.EpCreationRequestDTO;
+import se.yrgo.dto.SongDTO;
 
 @Service
 public class EpServiceImpl implements EpService {
@@ -19,41 +22,65 @@ public class EpServiceImpl implements EpService {
     }
 
     @Override
-    public List<Ep> getAllEps() {
-        return epRepository.findAll();
+    public List<EpResponseDTO> getAllEps() {
+        return epRepository.findAll().stream()
+        .map(this::convertToDTO)
+        .collect(Collectors.toList());
+    }
+    
+    private EpResponseDTO convertToDTO(Ep ep) {
+        EpResponseDTO response = new EpResponseDTO();
+        response.setId(ep.getId());
+        response.setTitle(ep.getTitle());
+        response.setArtistId(ep.getArtistId());
+        response.setRecordlabelId(ep.getRecordlabelId());
+
+        if (ep.getSongs() != null) {
+            List<SongDTO> songDTOs = ep.getSongs().stream()
+                .map(s -> new SongDTO(s.getId(), s.getTitle(), s.getDuration()))
+                .collect(Collectors.toList());
+            response.setSongs(songDTOs);
+        }
+        return response;
     }
 
     @Override
-    public Ep createEp(EpCreationRequestDTO dto) {
+    public EpResponseDTO createEp(EpCreationRequestDTO dto) {
         Ep ep = new Ep();
         ep.setTitle(dto.getTitle());
         ep.setArtistId(dto.getArtistId());
         ep.setRecordlabelId(dto.getRecordlabelId());
    
         if (dto.getSongs() != null) {
-            dto.getSongs().forEach(songDto -> {
-                Song song = new Song();
-                song.setTitle(songDto.getTitle());
-                song.setDuration(songDto.getDuration());
+            for(SongDTO sDto : dto.getSongs()){
+                Song song = new Song(sDto.getTitle(), sDto.getDuration()); 
+                song.setEp(ep);
+                ep.getSongs().add(song);
 
-                ep.addSong(song);
-            });
+            }
 
         }
-        return epRepository.save(ep);
+       Ep savedEp =  epRepository.save(ep);
+       return convertToDTO(savedEp);
     }
 
     @Override
-    public Ep getEpById(Long id) {
-        return epRepository.findById(id).orElseThrow(() -> new RuntimeException("ep was not found"));
+    public EpResponseDTO getEpById(Long id) {
+       Ep ep = epRepository.findById(id).orElseThrow(() -> new RuntimeException("Ep was not found"));
+       return convertToDTO(ep); 
     }
 
     @Override
-    public Ep updateEp(Long id, Ep ep) {
-        Ep existing = getEpById(id);
-        existing.setTitle(ep.getTitle());
-        existing.setSongs(ep.getSongs());
-        return epRepository.save(existing);
+    public EpResponseDTO updateEp(Long id, EpCreationRequestDTO dto) {
+       Ep existing = epRepository.findById(id)
+       .orElseThrow(() -> new RuntimeException("Ep was not found")); 
+
+       existing.setTitle(dto.getTitle());
+       existing.setArtistId(dto.getArtistId());
+       existing.setRecordlabelId(dto.getRecordlabelId());
+
+       Ep savedEp = epRepository.save(existing); 
+       return convertToDTO(savedEp); 
     }
 
     @Override
@@ -62,8 +89,8 @@ public class EpServiceImpl implements EpService {
     }
 
     @Override
-    public List<Ep> getEpsByRecordlabel(Long recordlabelId) {
-        return epRepository.findByRecordlabelId(recordlabelId);
+    public List<EpResponseDTO> getEpsByRecordlabel(Long recordlabelId) {
+        return epRepository.findByRecordlabelId(recordlabelId).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
 }
