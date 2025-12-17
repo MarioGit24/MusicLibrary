@@ -38,6 +38,7 @@ public class SingleServiceImpl implements SingleService {
         single.setTitle(dto.getTitle());
         single.setDuration(dto.getDuration());
         single.setRecordlabelId(dto.getRecordlabelId());
+        single.setArtistId(dto.getArtistId()); 
 
         Single saved = singleRepository.save(single);
         return convertToDTO(saved);
@@ -51,6 +52,8 @@ public class SingleServiceImpl implements SingleService {
         existing.setTitle(dto.getTitle());
         existing.setDuration(dto.getDuration());
         existing.setRecordlabelId(dto.getRecordlabelId());
+        // Uppdatera även artist-kopplingen
+        existing.setArtistId(dto.getArtistId());
         
         Single saved = singleRepository.save(existing);
         return convertToDTO(saved);
@@ -61,11 +64,13 @@ public class SingleServiceImpl implements SingleService {
         singleRepository.deleteById(id);
     }
 
+
     private SingleResponseDTO convertToDTO(Single single) {
         SingleResponseDTO response = new SingleResponseDTO();
         response.setTitle(single.getTitle());
         response.setDuration(single.getDuration());
         response.setRecordlabelId(single.getRecordlabelId());
+        response.setArtistId(single.getArtistId()); 
         return response;
     }
 }

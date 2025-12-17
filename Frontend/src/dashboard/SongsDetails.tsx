@@ -8,7 +8,8 @@ import { SongData } from "../types/ApiTypes";
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<any>>;
-  songs: SongData[];
+  // Vi gör songs valfri med ? eftersom Singlar inte har en låtlista
+  songs?: SongData[]; 
   albumTitle: string;
 }
 
@@ -62,24 +63,31 @@ function SongsDetails({ open, setOpen, songs, albumTitle }: Props) {
                 overflowY: "auto",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between",
                 marginTop: 20,
                 marginBottom: 15,
               }}
             >
-              {songs.map((song, i) => (
-                <div key={i}>
-                  <h4 style={{ color: "#b49bb5e4", marginBottom: 3 }}>
-                    Song {i + 1}
-                  </h4>
-                  <p>
-                    <b>Title:</b> {song.title}
-                  </p>
-                  <p>
-                    <b>Duration:</b> {song.duration} seconds
-                  </p>
-                </div>
-              ))}
+              {/* FIX: Vi lägger till en kontroll så att map bara körs om songs finns */}
+              {songs && songs.length > 0 ? (
+                songs.map((song, i) => (
+                  <div key={i} style={{ marginBottom: 15 }}>
+                    <h4 style={{ color: "#b49bb5e4", marginBottom: 3 }}>
+                      Song {i + 1}
+                    </h4>
+                    <p style={{ margin: 0 }}>
+                      <b style={{ color: "#9e79a1" }}>Title:</b> {song.title}
+                    </p>
+                    <p style={{ margin: 0 }}>
+                      <b style={{ color: "#9e79a1" }}>Duration:</b> {song.duration} seconds
+                    </p>
+                  </div>
+                ))
+              ) : (
+                /* Detta visas om det är en Single utan låtlista */
+                <Typography sx={{ color: "#aea5afff", fontStyle: "italic" }}>
+                  This is a single release with no additional tracks.
+                </Typography>
+              )}
             </div>
           </Box>
         </Fade>
