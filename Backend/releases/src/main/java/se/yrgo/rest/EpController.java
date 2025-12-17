@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import se.yrgo.domain.Ep;
 import se.yrgo.dto.EpCreationRequestDTO;
+import se.yrgo.dto.EpResponseDTO;
 import se.yrgo.service.EpService;
 
 
@@ -25,7 +26,7 @@ public class EpController {
     } 
 
     @GetMapping 
-    public List<Ep> getAllEps(@RequestParam(required = false) Long recordlabelId){
+    public List<EpResponseDTO> getAllEps(@RequestParam(required = false) Long recordlabelId){
         if (recordlabelId != null){
             return epService.getEpsByRecordlabel(recordlabelId);
         }
@@ -33,13 +34,14 @@ public class EpController {
     }
 
     @GetMapping("/{id}")
-    public Ep GetEp(@PathVariable Long id){
+    public EpResponseDTO GetEp(@PathVariable Long id){
         return epService.getEpById(id); 
     }
 
     @PutMapping("/{id}")
-    public Ep updateEp(@PathVariable Long id, @RequestBody Ep ep) {
-        return epService.updateEp(id, ep);
+    public ResponseEntity<EpResponseDTO> updateEp(@PathVariable Long id, @RequestBody EpCreationRequestDTO requestDTO) {
+        EpResponseDTO response = epService.updateEp(id, requestDTO); 
+        return ResponseEntity.ok(response); 
     }
 
     @DeleteMapping("/{id}")
@@ -49,8 +51,8 @@ public class EpController {
     }
 
     @PostMapping
-    public ResponseEntity<Ep> createEpWithSongs(@RequestBody EpCreationRequestDTO requestDTO) {
-        Ep createdEp = epService.createEp(requestDTO);
+    public ResponseEntity<EpResponseDTO> createEpWithSongs(@RequestBody EpCreationRequestDTO requestDTO) {
+        EpResponseDTO createdEp = epService.createEp(requestDTO);
         return new ResponseEntity<>(createdEp, HttpStatus.CREATED);
     }
 

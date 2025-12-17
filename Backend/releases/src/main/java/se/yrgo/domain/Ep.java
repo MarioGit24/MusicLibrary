@@ -12,8 +12,21 @@ public class Ep {
     private Long artistId;
     private Long recordlabelId;
     private String title;
+    
     @OneToMany(mappedBy = "ep", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
+
+    public Ep() {
+    }
+    
+
+    public Ep(Long artistId, Long recordlabelId, String title, List<Song> songs) {
+        this.artistId = artistId;
+        this.recordlabelId = recordlabelId;
+        this.title = title;
+        this.songs = songs;
+    }
+
 
     public Long getArtistId() {
         return artistId;
