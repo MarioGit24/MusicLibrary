@@ -1,6 +1,6 @@
+import RecordLabelDashboard from "./dashboard/RecordLabelDashboard";
 import Header from "./Header";
 import PopoverMenu from "./menu/PopopverMenu";
-import RecordLabelDashboard from "./RecordLabelDashboard";
 
 function App() {
   return (
@@ -13,9 +13,15 @@ function App() {
       }}
     >
       <Header />
-      <PopoverMenu />
-      {/* TODO: take back <Artists /> */}
-      <RecordLabelDashboard />
+      <div
+        style={{
+          backgroundColor: "#121212",
+        }}
+      >
+        <PopoverMenu />
+        {/* TODO: take back <Artists /> */}
+        <RecordLabelDashboard />
+      </div>
     </div>
   );
 }

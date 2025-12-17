@@ -15,7 +15,7 @@ function Header() {
       }}
     >
       <h2 style={{ fontWeight: 500, letterSpacing: -1, color: "#8F6D92" }}>
-        Releasify
+        Republic Records
       </h2>
 
       <Autocomplete

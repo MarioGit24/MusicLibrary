@@ -41,6 +41,7 @@ function PopoverMenu() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
+        sx={{ backgroundColor: "#ffffff0c" }}
       >
         <AddIcon sx={{ fill: "#8F6D92" }} />
       </IconButton>
