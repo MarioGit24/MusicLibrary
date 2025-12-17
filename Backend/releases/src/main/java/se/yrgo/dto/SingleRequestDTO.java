@@ -17,12 +17,12 @@ public class SingleRequestDTO {
         return title;
     }
 
-    public Long getRecordLabelId() {
+    public Long getRecordlabelId() {
         return recordlabelId;
     }
 
-    public void setRecordLabelId(Long recordLabelId) {
-        this.recordlabelId = recordLabelId;
+    public void setRecordlabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
     }
 
     public void setTitle(String title) {

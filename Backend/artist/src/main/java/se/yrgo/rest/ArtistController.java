@@ -1,18 +1,19 @@
 package se.yrgo.rest;
 
-import java.util.*;
-
-import org.springframework.beans.factory.annotation.*;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import se.yrgo.domain.*;
-import se.yrgo.service.*;
+import se.yrgo.dto.ArtistRequestDTO;
+import se.yrgo.dto.ArtistResponseDTO;
+import se.yrgo.service.ArtistService;
 
 @RestController
 @RequestMapping("/artists")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ArtistController {
+
     private final ArtistService artistService;
 
     @Autowired
@@ -21,7 +22,7 @@ public class ArtistController {
     }
 
     @GetMapping
-    public List<Artist> getAllArtists(@RequestParam(required = false) Long recordlabelId) {
+    public List<ArtistResponseDTO> getAllArtists(@RequestParam(required = false, name = "labelId") Long recordlabelId) {
         if (recordlabelId != null) {
             return artistService.findByRecordlabelId(recordlabelId);
         }
@@ -29,20 +30,19 @@ public class ArtistController {
     }
 
     @GetMapping("/{id}")
-    public Artist getArtistById(@PathVariable Long id) {
-        return artistService.getArtist(id);
+    public ResponseEntity<ArtistResponseDTO> getArtistById(@PathVariable Long id) {
+        return ResponseEntity.ok(artistService.getArtist(id));
     }
 
     @PostMapping
-    public ResponseEntity<Artist> createArtist(@RequestBody Artist artist) {
-        Artist createdArtist = artistService.createArtist(artist);
+    public ResponseEntity<ArtistResponseDTO> createArtist(@RequestBody ArtistRequestDTO artistDto) {
+        ArtistResponseDTO createdArtist = artistService.createArtist(artistDto);
         return new ResponseEntity<>(createdArtist, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/assign-label")
-    public ResponseEntity<Artist> assignToLabel(@PathVariable Long id, @RequestParam Long recordlabelId) {
-        Artist updatedArtist = artistService.updateArtistLabel(id, recordlabelId);
+    public ResponseEntity<ArtistResponseDTO> assignToLabel(@PathVariable Long id, @RequestParam(name = "recordlabelId") Long recordlabelId) {
+        ArtistResponseDTO updatedArtist = artistService.updateArtistLabel(id, recordlabelId);
         return ResponseEntity.ok(updatedArtist);
     }
-
 }
