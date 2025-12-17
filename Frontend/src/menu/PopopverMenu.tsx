@@ -20,6 +20,10 @@ function PopoverMenu() {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   const handleOpenModal = (type: string) => {
     setAnchorEl(null);
     setModalOpen(true);
@@ -49,7 +53,7 @@ function PopoverMenu() {
         aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleOpenModal}
+        onClose={handleCloseMenu}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",

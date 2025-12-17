@@ -19,7 +19,7 @@ function App() {
         }}
       >
         <PopoverMenu />
-        {/* TODO: take back <Artists /> */}
+        {/* TODO: take back <Artists /> TODO: or dont */}
         <RecordLabelDashboard />
       </div>
     </div>
