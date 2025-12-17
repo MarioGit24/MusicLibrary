@@ -20,7 +20,7 @@ public class EpServiceImpl implements EpService {
     }
 
     @Override
-    public List<Ep> getEps() {
+    public List<Ep> getAllEps() {
         return epRepository.findAll();
     }
 
@@ -29,7 +29,7 @@ public class EpServiceImpl implements EpService {
         Ep ep = new Ep();
         ep.setTitle(dto.getTitle());
         ep.setArtistId(dto.getArtistId());
-        ep.setRecordLabelId(dto.getRecordlabelId());
+        ep.setRecordlabelId(dto.getRecordlabelId());
 
         if (dto.getSongsList() != null) {
             dto.getSongsList().forEach(songDto -> {

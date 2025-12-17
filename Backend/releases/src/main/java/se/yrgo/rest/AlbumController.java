@@ -40,6 +40,7 @@ public class AlbumController {
         return albumService.getAlbumById(id);
     }
 
+
     @PutMapping("/{id}")
     public Album updateAlbum(@PathVariable Long id, @RequestBody Album album) {
         return albumService.updateAlbum(id, album);

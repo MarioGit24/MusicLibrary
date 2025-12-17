@@ -6,7 +6,7 @@ import se.yrgo.domain.*;
 import se.yrgo.dto.EpCreationRequestDTO;
 
 public interface EpService {
-    public List<Ep> getEps();
+    public List<Ep> getAllEps();
 
     public Ep createEp(EpCreationRequestDTO ep);
 

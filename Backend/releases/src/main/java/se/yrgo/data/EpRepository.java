@@ -10,6 +10,6 @@ import se.yrgo.domain.Ep;
 @Repository
 public interface EpRepository extends JpaRepository<Ep, Long> {
 
-    public List<Ep> findByRecordlabelId(Long recordlabelId); 
+    public List<Ep> findByRecordlabelId(Long id); 
 
 }
