@@ -1,16 +1,28 @@
 package se.yrgo.dto;
 
-public class SingleDTO {
+public class SingleRequestDTO {
     private String title;
     private int duration;
+    private Long recordlabelId;
 
-    public SingleDTO(String title, int duration){
+    public SingleRequestDTO(){}
+
+    public SingleRequestDTO(String title, int duration, Long recordlabelId){
         this.title = title;
         this.duration = duration;
+        this.recordlabelId = recordlabelId;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public Long getRecordlabelId() {
+        return recordlabelId;
+    }
+
+    public void setRecordlabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
     }
 
     public void setTitle(String title) {

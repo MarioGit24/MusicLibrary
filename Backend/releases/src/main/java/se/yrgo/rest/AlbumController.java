@@ -29,11 +29,6 @@ public class AlbumController {
         return albumService.getAllAlbums();
     }
 
-    // @PostMapping
-    // public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
-    // Album createdAlbum = albumService.createAlbum(album);
-    // return new ResponseEntity<>(createdAlbum, HttpStatus.CREATED);
-    // }
 
     @GetMapping("/{id}")
     public AlbumResponseDTO getAlbum(@PathVariable Long id) {

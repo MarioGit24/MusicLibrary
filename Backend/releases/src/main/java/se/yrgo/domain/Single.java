@@ -9,10 +9,35 @@ public class Single {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
+    private int duration;
+    private Long recordlabelId;
+
 
     public Single() {}
+
+    public Single(String title, int duration, Long recordlabelId){
+        this.title = title;
+        this.duration = duration;
+        this.recordlabelId = recordlabelId;
+
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public Long getRecordlabelId() {
+        return recordlabelId;
+    }
+
+    public void setRecordlabelId(Long recordlabelId) {
+        this.recordlabelId = recordlabelId;
+    }
 
     public Long getId() {
         return id;

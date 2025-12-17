@@ -1,18 +1,17 @@
 package se.yrgo.service;
 
 import java.util.*;
-
-import se.yrgo.domain.*;
+import se.yrgo.dto.*;
 
 public interface ArtistService {
 
-    public List<Artist> getAllArtists();
+    List<ArtistResponseDTO> getAllArtists();
 
-    public Artist getArtist(Long id);
+    ArtistResponseDTO getArtist(Long id);
 
-    public Artist createArtist(Artist artist);
+    ArtistResponseDTO createArtist(ArtistRequestDTO artistDto);
 
-    public Artist updateArtistLabel(Long artistId, Long recordlabelId);
+    ArtistResponseDTO updateArtistLabel(Long artistId, Long recordlabelId);
 
-    public List<Artist> findByRecordlabelId(Long recordlabelId);
+    List<ArtistResponseDTO> findByRecordlabelId(Long recordlabelId);
 }
