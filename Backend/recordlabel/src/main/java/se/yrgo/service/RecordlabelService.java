@@ -1,6 +1,5 @@
 package se.yrgo.service;
 
-import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 
 public interface RecordlabelService {
@@ -9,6 +8,6 @@ public interface RecordlabelService {
 
     RecordlabelResponseDTO getRecordlabelDetails(Long recordlabelId);
 
-    Recordlabel createRecordlabel(Recordlabel recordlabel);
+    RecordlabelResponseDTO createRecordlabel(RecordlabelRequestDTO recordDTO);
 
 }
