@@ -50,8 +50,10 @@ const RecordLabelDashboard = () => {
             <TypeFilter setType={setType} />
           </div>
           <div style={{ display: "flex", gap: 12 }}>
-            {labelData.releases.map((release) => (
-              <AlbumItem release={release} filterType={type} />
+            {labelData.releases.map((release, i) => (
+              <div key={i}>
+                <AlbumItem release={release} filterType={type} />
+              </div>
             ))}
           </div>
         </>

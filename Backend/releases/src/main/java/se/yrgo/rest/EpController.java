@@ -15,6 +15,7 @@ import se.yrgo.service.EpService;
 
 @RestController
 @RequestMapping("/eps")
+@CrossOrigin(origins = "http://localhost:3000")
 
 public class EpController {
 
