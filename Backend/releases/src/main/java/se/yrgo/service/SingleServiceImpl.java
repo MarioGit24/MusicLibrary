@@ -1,13 +1,13 @@
 package se.yrgo.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
-import org.springframework.stereotype.Service;
-import se.yrgo.data.SingleRepository;
-import se.yrgo.domain.Single;
-import se.yrgo.dto.SingleRequestDTO;
-import se.yrgo.dto.SingleResponseDTO;
+import org.springframework.stereotype.*;
+
+import se.yrgo.data.*;
+import se.yrgo.domain.*;
+import se.yrgo.dto.*;
 
 @Service
 public class SingleServiceImpl implements SingleService {
@@ -19,7 +19,7 @@ public class SingleServiceImpl implements SingleService {
     }
 
     @Override
-    public List<SingleResponseDTO> getSingles() { 
+    public List<SingleResponseDTO> getSingles() {
         return singleRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -38,6 +38,7 @@ public class SingleServiceImpl implements SingleService {
         single.setTitle(dto.getTitle());
         single.setDuration(dto.getDuration());
         single.setRecordlabelId(dto.getRecordlabelId());
+        single.setArtistId(dto.getArtistId());
 
         Single saved = singleRepository.save(single);
         return convertToDTO(saved);
@@ -47,11 +48,13 @@ public class SingleServiceImpl implements SingleService {
     public SingleResponseDTO updateSingle(Long id, SingleRequestDTO dto) {
         Single existing = singleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Single not found"));
-        
+
         existing.setTitle(dto.getTitle());
         existing.setDuration(dto.getDuration());
         existing.setRecordlabelId(dto.getRecordlabelId());
-        
+        // Uppdatera även artist-kopplingen
+        existing.setArtistId(dto.getArtistId());
+
         Single saved = singleRepository.save(existing);
         return convertToDTO(saved);
     }
@@ -66,6 +69,7 @@ public class SingleServiceImpl implements SingleService {
         response.setTitle(single.getTitle());
         response.setDuration(single.getDuration());
         response.setRecordlabelId(single.getRecordlabelId());
+        response.setArtistId(single.getArtistId());
         return response;
     }
 }

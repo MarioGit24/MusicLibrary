@@ -4,13 +4,16 @@ public class SingleRequestDTO {
     private String title;
     private int duration;
     private Long recordlabelId;
+    private Long artistId;
 
-    public SingleRequestDTO(){}
+    public SingleRequestDTO() {
+    }
 
-    public SingleRequestDTO(String title, int duration, Long recordlabelId){
+    public SingleRequestDTO(String title, int duration, Long recordlabelId, Long artistId) {
         this.title = title;
         this.duration = duration;
         this.recordlabelId = recordlabelId;
+        this.artistId = artistId;
     }
 
     public String getTitle() {
@@ -37,8 +40,12 @@ public class SingleRequestDTO {
         this.duration = duration;
     }
 
-    
+    public Long getArtistId() {
+        return artistId;
+    }
 
+    public void setArtistId(Long artistId) {
+        this.artistId = artistId;
+    }
 
-    
 }
