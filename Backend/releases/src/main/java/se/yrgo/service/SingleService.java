@@ -2,16 +2,17 @@ package se.yrgo.service;
 
 import java.util.List;
 
-import se.yrgo.domain.Single;
+import se.yrgo.dto.SingleRequestDTO;
+import se.yrgo.dto.SingleResponseDTO;
 
 public interface SingleService {
-    List<Single> getSingles(); 
+    List<SingleResponseDTO> getSingles(); 
 
-    Single createSingle(Single single);
+    SingleResponseDTO createSingle(SingleRequestDTO single);
     
-    Single updateSingle(Long id, Single single);
+    SingleResponseDTO updateSingle(Long id, SingleRequestDTO single);
 
-    Single getSingleById(Long id);
+    SingleResponseDTO getSingleById(Long id);
 
     void deleteSingle(Long id);
 }
