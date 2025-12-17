@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 import se.yrgo.service.*;
 

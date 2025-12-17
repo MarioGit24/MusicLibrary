@@ -37,7 +37,7 @@ public class SingleServiceImpl implements SingleService {
         Single single = new Single();
         single.setTitle(dto.getTitle());
         single.setDuration(dto.getDuration());
-        single.setRecordlabelId(dto.getRecordLabelId());
+        single.setRecordlabelId(dto.getRecordlabelId());
 
         Single saved = singleRepository.save(single);
         return convertToDTO(saved);
@@ -50,7 +50,7 @@ public class SingleServiceImpl implements SingleService {
         
         existing.setTitle(dto.getTitle());
         existing.setDuration(dto.getDuration());
-        existing.setRecordlabelId(dto.getRecordLabelId());
+        existing.setRecordlabelId(dto.getRecordlabelId());
         
         Single saved = singleRepository.save(existing);
         return convertToDTO(saved);
