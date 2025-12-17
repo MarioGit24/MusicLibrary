@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 import se.yrgo.service.*;
 
@@ -21,9 +20,9 @@ public class RecordlabelController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createLabel(@RequestBody Recordlabel recordlabel) {
-        recordlabelService.createRecordlabel(recordlabel);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<RecordlabelResponseDTO> createLabel(@RequestBody RecordlabelRequestDTO requestDTO) {
+        RecordlabelResponseDTO newLabel = recordlabelService.createRecordlabel(requestDTO);
+        return new ResponseEntity<>(newLabel, HttpStatus.CREATED);
     }
 
     @PutMapping("/{recordlabelId}/enroll-artist/{artistId}")
@@ -40,10 +39,4 @@ public class RecordlabelController {
         RecordlabelResponseDTO labelDetails = recordlabelService.getRecordlabelDetails(id);
         return ResponseEntity.ok(labelDetails);
     }
-
-    // @GetMapping("/{id}")
-    // public Album getAlbum(@PathVariable Long id) {
-    // return albumService.getAlbumById(id);
-    // }
-
 }

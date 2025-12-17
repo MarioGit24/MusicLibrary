@@ -6,10 +6,9 @@ import jakarta.persistence.*;
 public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private Long id;
-
     private String name;
-
     private Long recordlabelId;
 
     public Long getId() {
