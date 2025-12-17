@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import se.yrgo.domain.*;
 import se.yrgo.dto.*;
 import se.yrgo.service.*;
 
@@ -29,11 +28,6 @@ public class AlbumController {
         return albumService.getAllAlbums();
     }
 
-    // @PostMapping
-    // public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
-    // Album createdAlbum = albumService.createAlbum(album);
-    // return new ResponseEntity<>(createdAlbum, HttpStatus.CREATED);
-    // }
 
     @GetMapping("/{id}")
     public AlbumResponseDTO getAlbum(@PathVariable Long id) {

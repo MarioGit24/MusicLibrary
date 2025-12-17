@@ -1,13 +1,11 @@
 package se.yrgo.rest;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import se.yrgo.domain.Single;
+import se.yrgo.dto.*;
 import se.yrgo.service.SingleService;
 
 
@@ -15,10 +13,9 @@ import se.yrgo.service.SingleService;
 @RestController
 @RequestMapping("/singles")
 @CrossOrigin(origins = "http://localhost:3000")
-
 public class SingleController {
 
-    private SingleService singleService;
+    private final SingleService singleService;
 
     @Autowired
     public SingleController(SingleService singleService) {
@@ -26,24 +23,25 @@ public class SingleController {
     }
 
     @GetMapping
-    public List<Single> getAllSingles(){
+    public List<SingleResponseDTO> getAllSingles() {
         return singleService.getSingles(); 
     }
 
-    @PostMapping
-    public ResponseEntity<Single> createSingle(@RequestBody Single single){
-        Single newSingle = singleService.createSingle(single); 
-        return new ResponseEntity<>(newSingle, HttpStatus.CREATED); 
-    }
-
     @GetMapping("/{id}")
-    public Single getSingle(@PathVariable Long id){
+    public SingleResponseDTO getSingle(@PathVariable Long id) {
         return singleService.getSingleById(id);
     }
 
+    @PostMapping
+    public ResponseEntity<SingleResponseDTO> createSingle(@RequestBody SingleRequestDTO requestDTO) {
+        SingleResponseDTO response = singleService.createSingle(requestDTO); 
+        return new ResponseEntity<>(response, HttpStatus.CREATED); 
+    }
+
     @PutMapping("/{id}")
-    public Single updateSingle(@PathVariable Long id, @RequestBody Single single) {
-        return singleService.updateSingle(id, single);
+    public ResponseEntity<SingleResponseDTO> updateSingle(@PathVariable Long id, @RequestBody SingleRequestDTO requestDTO) {
+        SingleResponseDTO response = singleService.updateSingle(id, requestDTO);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
