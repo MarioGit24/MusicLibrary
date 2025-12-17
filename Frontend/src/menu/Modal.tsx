@@ -12,18 +12,18 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 
 const style = {
-  position: "absolute",
+  p: 3,
+  boxShadow: 10,
   top: "50%",
   left: "50%",
-  transform: "translate(-50%, -50%)",
   width: "70%",
-  minHeight: "40%",
-  bgcolor: "#1f1f1f",
-  borderRadius: "5px",
-  boxShadow: 10,
-  p: 3,
   display: "flex",
+  minHeight: "30%",
+  borderRadius: "5px",
+  position: "absolute",
+  bgcolor: "#1f1f1f",
   flexDirection: "column",
+  transform: "translate(-50%, -50%)",
 };
 
 interface Props {

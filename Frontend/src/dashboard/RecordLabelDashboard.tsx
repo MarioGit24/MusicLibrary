@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RecordlabelData } from "../types/ApiTypes";
 import AlbumItem from "./AlbumItem";
+import TypeFilter from "./TypeFilter";
 
 const RecordLabelDashboard = () => {
   const [labelData, setLabelData] = useState<RecordlabelData>();
@@ -36,7 +37,17 @@ const RecordLabelDashboard = () => {
 
       {labelData.releases.length !== 0 && (
         <>
-          <h2 style={{ marginTop: 30, marginBottom: 10 }}>Releases</h2>
+          <div
+            style={{
+              marginTop: 40,
+              marginBottom: 30,
+              display: "flex",
+              gap: 40,
+            }}
+          >
+            <h2>Releases</h2>
+            <TypeFilter />
+          </div>
           <ul>
             {labelData.releases.map((release) => (
               <AlbumItem release={release} />
