@@ -350,7 +350,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                     }}
                   />
                 </>
-              ) : type === "ep" ? (
+             ) : type.toLowerCase() === "ep" ? (
                 <>
                   {/* EP SECTION START */}
                   <TextField
@@ -449,7 +449,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   />
                   <TextField
                     placeholder="Add a song duration..."
-                    value={albumFormData.songs[1].duration}
+                    value={epFormData.songs[1].duration}
                     onChange={(e) =>
                       handleEpSongChange(1, "duration", e.target.value)
                     }
@@ -641,7 +641,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
                   justifyContent: "space-between",
                 }}
               >
-                {type === "album" || type === "EP" && (
+                {(type.toLowerCase() === "album" || type.toLowerCase() === "ep") && (
                   <FormControl
                     variant="filled"
                     size="small"
