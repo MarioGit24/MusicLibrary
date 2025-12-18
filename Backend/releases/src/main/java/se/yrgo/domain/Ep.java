@@ -6,19 +6,18 @@ import jakarta.persistence.*;
 
 @Entity
 public class Ep {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long artistId;
     private Long recordlabelId;
     private String title;
-    
+
     @OneToMany(mappedBy = "ep", cascade = CascadeType.ALL)
     private List<Song> songs = new ArrayList<>();
 
     public Ep() {
     }
-    
 
     public Ep(Long artistId, Long recordlabelId, String title, List<Song> songs) {
         this.artistId = artistId;
@@ -27,7 +26,6 @@ public class Ep {
         this.songs = songs;
     }
 
-
     public Long getArtistId() {
         return artistId;
     }
@@ -35,8 +33,6 @@ public class Ep {
     public void setArtistId(Long artistId) {
         this.artistId = artistId;
     }
-
-    
 
     public Long getRecordlabelId() {
         return recordlabelId;

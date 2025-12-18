@@ -32,9 +32,9 @@ public class RecordlabelServiceImpl implements RecordlabelService {
     public RecordlabelResponseDTO createRecordlabel(RecordlabelRequestDTO dto) {
         Recordlabel label = new Recordlabel();
         label.setName(dto.getLabelName());
-        
+
         Recordlabel savedLabel = recordlabelRepository.save(label);
-        
+
         return new RecordlabelResponseDTO(savedLabel, new ArrayList<>(), new ArrayList<>());
     }
 
@@ -46,12 +46,14 @@ public class RecordlabelServiceImpl implements RecordlabelService {
         List<ArtistDTO> artists = restClient.get()
                 .uri(artistServiceUrl + "?labelId=" + recordlabelId)
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ArtistDTO>>() {});
+                .body(new ParameterizedTypeReference<List<ArtistDTO>>() {
+                });
 
         List<ReleaseDTO> releases = restClient.get()
                 .uri(releasesServiceUrl + "?recordlabelId=" + recordlabelId)
                 .retrieve()
-                .body(new ParameterizedTypeReference<List<ReleaseDTO>>() {});
+                .body(new ParameterizedTypeReference<List<ReleaseDTO>>() {
+                });
 
         return new RecordlabelResponseDTO(label, artists, releases);
     }

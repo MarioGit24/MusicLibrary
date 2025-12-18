@@ -11,7 +11,6 @@ import se.yrgo.service.*;
 @RequestMapping("/recordlabels")
 @CrossOrigin(origins = "http://localhost:3000")
 public class RecordlabelController {
-
     private final RecordlabelService recordlabelService;
 
     @Autowired
@@ -39,4 +38,8 @@ public class RecordlabelController {
         RecordlabelResponseDTO labelDetails = recordlabelService.getRecordlabelDetails(id);
         return ResponseEntity.ok(labelDetails);
     }
+    // @GetMapping("/{id}")
+    // public Album getAlbum(@PathVariable Long id) {
+    // return albumService.getAlbumById(id);
+    // }
 }

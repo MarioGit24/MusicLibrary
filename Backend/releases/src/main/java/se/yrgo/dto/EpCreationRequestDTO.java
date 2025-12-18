@@ -2,14 +2,14 @@ package se.yrgo.dto;
 
 import java.util.*;
 
-public class EpCreationRequestDTO{
+public class EpCreationRequestDTO {
     private String title;
     private Long artistId;
     private Long recordlabelId;
-    private List<SongDTO> songs;
+    private List<SongDTO> songsList;
 
-    public List<SongDTO> getSongs() {
-        return songs;
+    public List<SongDTO> getSongsList() {
+        return songsList;
     }
 
     public String getTitle() {
@@ -36,8 +36,8 @@ public class EpCreationRequestDTO{
         this.recordlabelId = recordlabelId;
     }
 
-    public void setSongs(List<SongDTO> songsList) {
-        this.songs = songsList;
+    public void setSongsList(List<SongDTO> songsList) {
+        this.songsList = songsList;
     }
 
 }

@@ -56,7 +56,10 @@ function ModalMenu({ open, setOpen, type }: Props) {
   const [artists, setArtists] = useState<{ id: number; name: string }[]>([]);
 
   const [artistFormData, setArtistFormData] = useState({ name: "" });
-  const [releaseFormData, setReleaseFormData] = useState({ title: "", duration: "" });
+  const [releaseFormData, setReleaseFormData] = useState({
+    title: "",
+    duration: "",
+  });
   const [albumFormData, setAlbumFormData] = useState({
     title: "",
     artistId: "",
@@ -99,9 +102,12 @@ function ModalMenu({ open, setOpen, type }: Props) {
       });
       if (response.ok) {
         const data = await response.json();
-        await fetch(`http://localhost:8081/recordlabels/1/enroll-artist/${data.id}`, {
-          method: "PUT",
-        });
+        await fetch(
+          `http://localhost:8081/recordlabels/1/enroll-artist/${data.id}`,
+          {
+            method: "PUT",
+          }
+        );
         window.location.reload();
       }
     } catch (error) {
@@ -149,7 +155,7 @@ function ModalMenu({ open, setOpen, type }: Props) {
     const data = {
       title: releaseFormData.title,
       duration: parseInt(releaseFormData.duration) || 0,
-      artistId: albumFormData.artistId, 
+      artistId: albumFormData.artistId,
       recordlabelId: 1,
     };
     const res = await fetch("http://localhost:8083/singles", {
@@ -170,40 +176,95 @@ function ModalMenu({ open, setOpen, type }: Props) {
   };
 
   return (
-    <Modal open={open} onClose={handleClose} closeAfterTransition slots={{ backdrop: Backdrop }}>
+    <Modal
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+    >
       <Fade in={open}>
         <Box sx={style}>
           <Typography variant="h6" sx={{ color: "#9e79a1ff", mb: 2 }}>
             Create {type.toUpperCase()}
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+          >
             {type === "artist" && (
-              <TextField placeholder="Artist Name" value={artistFormData.name} onChange={(e) => setArtistFormData({ name: e.target.value })} fullWidth sx={inputStyle} />
+              <TextField
+                placeholder="Artist Name"
+                value={artistFormData.name}
+                onChange={(e) => setArtistFormData({ name: e.target.value })}
+                fullWidth
+                sx={inputStyle}
+              />
             )}
 
             {type === "single" && (
               <>
-                <TextField placeholder="Single Title" value={releaseFormData.title} onChange={(e) => setReleaseFormData({ ...releaseFormData, title: e.target.value })} fullWidth sx={inputStyle} />
-                <TextField placeholder="Duration (seconds)" value={releaseFormData.duration} onChange={(e) => setReleaseFormData({ ...releaseFormData, duration: e.target.value })} fullWidth sx={inputStyle} />
+                <TextField
+                  placeholder="Single Title"
+                  value={releaseFormData.title}
+                  onChange={(e) =>
+                    setReleaseFormData({
+                      ...releaseFormData,
+                      title: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  sx={inputStyle}
+                />
+                <TextField
+                  placeholder="Duration (seconds)"
+                  value={releaseFormData.duration}
+                  onChange={(e) =>
+                    setReleaseFormData({
+                      ...releaseFormData,
+                      duration: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  sx={inputStyle}
+                />
               </>
             )}
 
             {type.toLowerCase() === "ep" && (
               <>
-                <TextField placeholder="EP Title" value={epFormData.title} onChange={(e) => setEpFormData({ ...epFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                <TextField
+                  placeholder="EP Title"
+                  value={epFormData.title}
+                  onChange={(e) =>
+                    setEpFormData({ ...epFormData, title: e.target.value })
+                  }
+                  fullWidth
+                  sx={inputStyle}
+                />
                 {epFormData.songs.map((song, i) => (
                   <Box key={i} sx={{ display: "flex", gap: 1 }}>
-                    <TextField placeholder={`Song ${i + 1} Title`} value={song.title} onChange={(e) => {
-                      const newSongs = [...epFormData.songs];
-                      newSongs[i].title = e.target.value;
-                      setEpFormData({ ...epFormData, songs: newSongs });
-                    }} fullWidth sx={inputStyle} />
-                    <TextField placeholder="Sec" value={song.duration} onChange={(e) => {
-                      const newSongs = [...epFormData.songs];
-                      newSongs[i].duration = e.target.value;
-                      setEpFormData({ ...epFormData, songs: newSongs });
-                    }} sx={{ ...inputStyle, width: "100px" }} />
+                    <TextField
+                      placeholder={`Song ${i + 1} Title`}
+                      value={song.title}
+                      onChange={(e) => {
+                        const newSongs = [...epFormData.songs];
+                        newSongs[i].title = e.target.value;
+                        setEpFormData({ ...epFormData, songs: newSongs });
+                      }}
+                      fullWidth
+                      sx={inputStyle}
+                    />
+                    <TextField
+                      placeholder="Sec"
+                      value={song.duration}
+                      onChange={(e) => {
+                        const newSongs = [...epFormData.songs];
+                        newSongs[i].duration = e.target.value;
+                        setEpFormData({ ...epFormData, songs: newSongs });
+                      }}
+                      sx={{ ...inputStyle, width: "100px" }}
+                    />
                   </Box>
                 ))}
               </>
@@ -211,36 +272,81 @@ function ModalMenu({ open, setOpen, type }: Props) {
 
             {type === "album" && (
               <>
-                <TextField placeholder="Album Title" value={albumFormData.title} onChange={(e) => setAlbumFormData({ ...albumFormData, title: e.target.value })} fullWidth sx={inputStyle} />
+                <TextField
+                  placeholder="Album Title"
+                  value={albumFormData.title}
+                  onChange={(e) =>
+                    setAlbumFormData({
+                      ...albumFormData,
+                      title: e.target.value,
+                    })
+                  }
+                  fullWidth
+                  sx={inputStyle}
+                />
                 {albumFormData.songs.map((song, i) => (
                   <Box key={i} sx={{ display: "flex", gap: 1 }}>
-                    <TextField placeholder={`Song ${i + 1} Title`} value={song.title} onChange={(e) => {
-                      const newSongs = [...albumFormData.songs];
-                      newSongs[i].title = e.target.value;
-                      setAlbumFormData({ ...albumFormData, songs: newSongs });
-                    }} fullWidth sx={inputStyle} />
-                    <TextField placeholder="Sec" value={song.duration} onChange={(e) => {
-                      const newSongs = [...albumFormData.songs];
-                      newSongs[i].duration = e.target.value;
-                      setAlbumFormData({ ...albumFormData, songs: newSongs });
-                    }} sx={{ ...inputStyle, width: "100px" }} />
+                    <TextField
+                      placeholder={`Song ${i + 1} Title`}
+                      value={song.title}
+                      onChange={(e) => {
+                        const newSongs = [...albumFormData.songs];
+                        newSongs[i].title = e.target.value;
+                        setAlbumFormData({ ...albumFormData, songs: newSongs });
+                      }}
+                      fullWidth
+                      sx={inputStyle}
+                    />
+                    <TextField
+                      placeholder="Sec"
+                      value={song.duration}
+                      onChange={(e) => {
+                        const newSongs = [...albumFormData.songs];
+                        newSongs[i].duration = e.target.value;
+                        setAlbumFormData({ ...albumFormData, songs: newSongs });
+                      }}
+                      sx={{ ...inputStyle, width: "100px" }}
+                    />
                   </Box>
                 ))}
               </>
             )}
 
-            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+            >
               {type !== "artist" && (
-                <FormControl variant="filled" size="small" sx={{ width: 200, background: "#d7d7d718", borderRadius: 2 }}>
-                  <InputLabel sx={{ color: "#8e7990e4" }}>Select Artist</InputLabel>
-                  <Select value={albumFormData.artistId} onChange={(e) => setAlbumFormData({ ...albumFormData, artistId: e.target.value as string })} sx={{ color: "#aea5afff" }}>
+                <FormControl
+                  variant="filled"
+                  size="small"
+                  sx={{ width: 200, background: "#d7d7d718", borderRadius: 2 }}
+                >
+                  <InputLabel sx={{ color: "#8e7990e4" }}>
+                    Select Artist
+                  </InputLabel>
+                  <Select
+                    value={albumFormData.artistId}
+                    onChange={(e) =>
+                      setAlbumFormData({
+                        ...albumFormData,
+                        artistId: e.target.value as string,
+                      })
+                    }
+                    sx={{ color: "#aea5afff" }}
+                  >
                     {artists.map((a) => (
-                      <MenuItem key={a.id} value={a.id}>{a.name}</MenuItem>
+                      <MenuItem key={a.id} value={a.id}>
+                        {a.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               )}
-              <Button type="submit" variant="contained" sx={{ bgcolor: "#8F6D92", "&:hover": { bgcolor: "#7a5c7d" } }}>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ bgcolor: "#8F6D92", "&:hover": { bgcolor: "#7a5c7d" } }}
+              >
                 Create
               </Button>
             </Box>
